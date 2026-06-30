@@ -38,12 +38,12 @@ async function getProvidersById(req, res) {
 
 async function createProviders(req, res) {
   try {
-    const { provider_name } = req.body || {};
+    const { provider_name, slug } = req.body || {};
     let logo = req.body?.logo;
     if (req.file) {
       logo = `/uploads/${req.file.filename}`;
     }
-    const result = await providerService.createProviders(provider_name, logo);
+    const result = await providerService.createProviders(provider_name, slug, logo);
     res.status(200).json({
       success: true,
       message: "Provider Created Successfully",
@@ -60,12 +60,12 @@ async function createProviders(req, res) {
 async function updateProviders(req, res) {
   try {
     const { id } = req.params;
-    const { provider_name } = req.body || {};
+    const { provider_name, slug } = req.body || {};
     let logo = req.body?.logo;
     if (req.file) {
       logo = `/uploads/${req.file.filename}`;
     }
-    const result = await providerService.updateProviders(id, provider_name, logo);
+    const result = await providerService.updateProviders(id, provider_name, slug, logo);
     if (!result) {
       return res.status(404).json({
         success: false,
