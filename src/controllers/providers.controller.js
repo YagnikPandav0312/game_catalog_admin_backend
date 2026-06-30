@@ -1,4 +1,5 @@
 const providerService = require("../service/providerService");
+const cloudinary = require("../config/cloudinary");
 
 async function getProviders(req, res) {
   try {
@@ -39,11 +40,14 @@ async function getProvidersById(req, res) {
 async function createProviders(req, res) {
   try {
     const { provider_name, slug } = req.body || {};
-    let logo = req.body?.logo;
-    if (req.file) {
-      logo = `/uploads/${req.file.filename}`;
-    }
-    const result = await providerService.createProviders(provider_name, slug, logo);
+    const logo = req.file ? req.file.path : null;
+    const public_id = req.file ? req.file.filename : null;
+    const result = await providerService.createProviders(
+      provider_name,
+      slug,
+      logo,
+      public_id,
+    );
     res.status(200).json({
       success: true,
       message: "Provider Created Successfully",
@@ -61,13 +65,39 @@ async function updateProviders(req, res) {
   try {
     const { id } = req.params;
     const { provider_name, slug } = req.body || {};
-    let logo = req.body?.logo;
-    if (req.file) {
-      logo = `/uploads/${req.file.filename}`;
-    }
-    const result = await providerService.updateProviders(id, provider_name, slug, logo);
-    if (!result) {
+
+    // Fetch existing provider first
+    const provider = await providerService.getProvidersById(id);
+    if (!provider) {
       return res.status(404).json({
+        success: false,
+        message: "Provider not found",
+      });
+    }
+
+    let logo = provider.logo;
+    let public_id = provider.public_id;
+
+    if (req.file) {
+      // Delete old image from Cloudinary if exists
+      if (provider.public_id) {
+        await cloudinary.uploader.destroy(provider.public_id);
+      }
+      // Save new image details
+      logo = req.file.path;
+      public_id = req.file.filename;
+    }
+
+    const result = await providerService.updateProviders(
+      id,
+      provider_name,
+      slug,
+      logo,
+      public_id,
+    );
+
+    if (!result) {
+      return res.status(400).json({
         success: false,
         message: "Update Provider Failed",
       });
@@ -88,13 +118,28 @@ async function updateProviders(req, res) {
 async function deleteProviders(req, res) {
   try {
     const { id } = req.params;
+
+    // Fetch provider first to get public_id
+    const provider = await providerService.getProvidersById(id);
+    if (!provider) {
+      return res.status(404).json({
+        success: false,
+        message: "Provider not found",
+      });
+    }
+
     const result = await providerService.deleteProviders(id);
     if (!result) {
-      return res.status(404).json({
+      return res.status(400).json({
         success: false,
         message: "Delete Provider Failed",
       });
     }
+
+    if (provider.public_id) {
+      await cloudinary.uploader.destroy(provider.public_id);
+    }
+
     res.status(200).json({
       success: true,
       message: "Deleted Provider Successfully",

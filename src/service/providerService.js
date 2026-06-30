@@ -9,16 +9,33 @@ async function getProvidersById(provider_id) {
   return await providerRepo.getProviderById(provider_id);
 }
 
-async function createProviders(provider_name, slug, logo) {
-  if (!provider_name || provider_name.trim() === "") {
-    throw new Error("Provider name is required");
-  }
-  const result = await providerRepo.createProviders(provider_name, slug, logo);
+async function createProviders(provider_name, slug, logo, public_id) {
+  // if (!provider_name || provider_name.trim() === "") {
+  //   throw new Error("Provider name is required");
+  // }
+  const result = await providerRepo.createProviders(
+    provider_name,
+    slug,
+    logo,
+    public_id,
+  );
   return result;
 }
 
-async function updateProviders(provider_id, provider_name, slug, logo) {
-  const result = await providerRepo.updateProvider(provider_id, provider_name, slug, logo);
+async function updateProviders(
+  provider_id,
+  provider_name,
+  slug,
+  logo,
+  public_id,
+) {
+  const result = await providerRepo.updateProvider(
+    provider_id,
+    provider_name,
+    slug,
+    logo,
+    public_id,
+  );
   if (!result.success) {
     return null;
   }
