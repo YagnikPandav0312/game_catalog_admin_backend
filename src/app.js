@@ -8,6 +8,7 @@ const providersRoutes = require("./routes/providers.routes");
 const gametypeRoutes = require("./routes/gametype.routes");
 const devicetypeRoutes = require("./routes/devicetype.routes");
 const gamesRoutes = require("./routes/games.routes");
+const gamecategoryRoutes = require("./routes/gamecategory.routes");
 const logger = require("./middlewares/logger.middleware");
 const app = express();
 
@@ -23,5 +24,6 @@ app.use("/api/providers", providersRoutes);
 app.use("/api/gametype", gametypeRoutes);
 app.use("/api/devicetype", devicetypeRoutes);
 app.use("/api/games", gamesRoutes);
+app.use("/api/gamecategory", gamecategoryRoutes);
 
 module.exports = app;
