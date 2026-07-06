@@ -18,13 +18,14 @@ async function getGameById(id) {
 async function createGame(game) {
     const result = await pool.query(
         `SELECT create_game(
-$1,$2,
-$3,$4,$5,
-$6,$7,$8,
-$9,$10,$11
+$1,$2,$3,
+$4,$5,$6,
+$7,$8,$9,
+$10,$11,$12
 ) AS game_id`,
         [
             game.provider_id,
+            game.category_id,
             game.game_type_id,
             game.game_name,
             game.slug,
@@ -46,11 +47,13 @@ async function updateGame(id, game) {
 $1,$2,$3,
 $4,$5,$6,
 $7,$8,$9,
-$10,$11,$12
+$10,$11,$12,
+$13
 ) AS success`,
         [
             id,
             game.provider_id,
+            game.category_id,
             game.game_type_id,
             game.game_name,
             game.slug,

@@ -45,6 +45,7 @@ async function createGame(req, res) {
         const payload = {
             ...req.body,
             provider_id: req.body.provider_id ? parseInt(req.body.provider_id, 10) : null,
+            category_id: req.body.category_id ? parseInt(req.body.category_id, 10) : null,
             game_type_id: req.body.game_type_id ? parseInt(req.body.game_type_id, 10) : null,
             min_bet: req.body.min_bet ? parseFloat(req.body.min_bet) : null,
             max_bet: req.body.max_bet ? parseFloat(req.body.max_bet) : null,
@@ -74,6 +75,7 @@ async function updateGame(req, res) {
         const payload = {
             ...req.body,
             provider_id: req.body.provider_id ? parseInt(req.body.provider_id, 10) : null,
+            category_id: req.body.category_id ? parseInt(req.body.category_id, 10) : null,
             game_type_id: req.body.game_type_id ? parseInt(req.body.game_type_id, 10) : null,
             min_bet: req.body.min_bet ? parseFloat(req.body.min_bet) : null,
             max_bet: req.body.max_bet ? parseFloat(req.body.max_bet) : null,
