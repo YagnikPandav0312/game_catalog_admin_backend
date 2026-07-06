@@ -18,8 +18,7 @@ async function getGameType(req, res) {
 
 async function getGameTypeById(req, res) {
   try {
-    const id = req.params.id;
-    const result = await service.getGameTypeById(id);
+    const result = await service.getGameTypeById(req.params.id);
     if (!result) {
       return res.status(404).json({
         success: false,

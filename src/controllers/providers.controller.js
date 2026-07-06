@@ -16,8 +16,7 @@ async function getProviders(req, res) {
 
 async function getProvidersById(req, res) {
   try {
-    const game_provider_id = req.params.id;
-    const result = await providerService.getProvidersById(game_provider_id);
+    const result = await providerService.getProvidersById(req.params.id);
     if (!result) {
       return res.status(404).json({
         success: false,
@@ -65,8 +64,6 @@ async function updateProviders(req, res) {
   try {
     const { id } = req.params;
     const { provider_name, slug } = req.body || {};
-
-    // Fetch existing provider first
     const provider = await providerService.getProvidersById(id);
     if (!provider) {
       return res.status(404).json({
@@ -74,20 +71,15 @@ async function updateProviders(req, res) {
         message: "Provider not found",
       });
     }
-
     let logo = provider.logo;
     let public_id = provider.public_id;
-
     if (req.file) {
-      // Delete old image from Cloudinary if exists
       if (provider.public_id) {
         await cloudinary.uploader.destroy(provider.public_id);
       }
-      // Save new image details
       logo = req.file.path;
       public_id = req.file.filename;
     }
-
     const result = await providerService.updateProviders(
       id,
       provider_name,
@@ -95,7 +87,6 @@ async function updateProviders(req, res) {
       logo,
       public_id,
     );
-
     if (!result) {
       return res.status(400).json({
         success: false,
@@ -118,8 +109,6 @@ async function updateProviders(req, res) {
 async function deleteProviders(req, res) {
   try {
     const { id } = req.params;
-
-    // Fetch provider first to get public_id
     const provider = await providerService.getProvidersById(id);
     if (!provider) {
       return res.status(404).json({

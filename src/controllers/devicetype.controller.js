@@ -18,12 +18,11 @@ async function getDeviceTypes(req, res) {
 
 async function getDeviceTypeById(req, res) {
   try {
-    const id = req.params.id;
     const result = await service.getDeviceTypeById(req.params.id);
     if (!result) {
       return res.status(404).json({
         success: false,
-        message: "DeviceType not found",
+        message: "Device Type not found",
       });
     }
     return res.status(200).json({
@@ -93,7 +92,7 @@ async function deleteDeviceType(req, res) {
       });
     }
     return res.status(200).json({
-      success: true,
+      success: true,  
       message: "Device Type Deleted Successfully",
       data: result,
     });
