@@ -4,14 +4,18 @@ async function getDeviceTypes(req, res) {
   try {
     const result = await service.getDeviceTypes();
     return res.status(200).json({
-      success: true,
-      message: "Device Types fetched successfully",
       data: result,
+      status: {
+        code: 0,
+        message: "Device Types Fetched Successfully"
+      }
     });
   } catch (error) {
     res.status(500).json({
-      success: false,
-      message: error.message,
+      status: {
+        code: 2,
+        message: error.message
+      }
     });
   }
 }
@@ -21,19 +25,25 @@ async function getDeviceTypeById(req, res) {
     const result = await service.getDeviceTypeById(req.params.id);
     if (!result) {
       return res.status(404).json({
-        success: false,
-        message: "Device Type not found",
+        status: {
+          code: 1,
+          message: "Device Type Not Found"
+        }
       });
     }
     return res.status(200).json({
-      success: true,
-      message: "Device Type Fetched Successfully",
       data: result,
+      status: {
+        code: 0,
+        message: "Device Type Fetched Successfully",
+      }
     });
   } catch (error) {
     res.status(500).json({
-      success: false,
-      message: error.message,
+      status: {
+        code: 2,
+        message: error.message
+      }
     });
   }
 }
@@ -43,14 +53,17 @@ async function createDeviceType(req, res) {
     const { device_type_name, slug } = req.body;
     const result = await service.createDeviceType(device_type_name, slug);
     return res.status(201).json({
-      success: true,
-      message: "Device Type Created Successfully",
-      data: result,
+      status: {
+        code: result.code,
+        message: result.message
+      }
     });
   } catch (error) {
     res.status(500).json({
-      success: false,
-      message: error.message,
+      status: {
+        code: 2,
+        message: error.message
+      }
     });
   }
 }
@@ -65,19 +78,24 @@ async function updateDeviceType(req, res) {
     );
     if (!result) {
       return res.status(404).json({
-        success: false,
-        message: "Update Device Type Failed",
+        status: {
+          code: 1,
+          message: "Update Device Type Failed",
+        }
       });
     }
     return res.status(200).json({
-      success: true,
-      message: "Device Type Updated Successfully",
-      data: result,
+      status: {
+        code: result.code,
+        message: result.message
+      }
     });
   } catch (error) {
     res.status(500).json({
-      success: false,
-      message: error.message,
+      status: {
+        code: 2,
+        message: error.message
+      }
     });
   }
 }
@@ -87,19 +105,25 @@ async function deleteDeviceType(req, res) {
     const result = await service.deleteDeviceType(req.params.id);
     if (!result) {
       return res.status(404).json({
-        success: false,
-        message: "Delete Device Type Failed",
+        status: {
+          code: 1,
+          message: "Delete Device Type Failed",
+        }
       });
     }
     return res.status(200).json({
-      success: true,  
-      message: "Device Type Deleted Successfully",
       data: result,
+      status: {
+        code: 0,
+        message: "Device Type Deleted Successfully",
+      }
     });
   } catch (error) {
     res.status(500).json({
-      success: false,
-      message: error.message,
+      status: {
+        code: 2,
+        message: error.message
+      }
     });
   }
 }

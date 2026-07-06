@@ -9,15 +9,16 @@ async function getDeviceTypeById(id) {
 }
 
 async function createDeviceType(name, slug) {
-  if (!name || name.trim() === "") {
-    throw new Error("Device type name is required");
+  const result = await repo.createDeviceType(name, slug);
+  if (!result.code === 0) {
+    return null;
   }
-  return await repo.createDeviceType(name, slug);
+  return result;
 }
 
 async function updateDeviceType(id, name, slug) {
   const result = await repo.updateDeviceType(id, name, slug);
-  if (!result.success) {
+  if (!result.code === 0) {
     return null;
   }
   return result;

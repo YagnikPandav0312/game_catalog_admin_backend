@@ -6,7 +6,7 @@ const {
   createDeviceType,
   updateDeviceType,
   deleteDeviceType,
-} = require("../controllers/deviceType.controller");
+} = require("../controllers/devicetype.controller");
 
 router.get("/get_device_type", getDeviceTypes);
 router.get("/get_device_type_by_id/:id", getDeviceTypeById);
