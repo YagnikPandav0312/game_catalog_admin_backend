@@ -21,12 +21,13 @@ async function createGame(game) {
 $1,$2,$3,
 $4,$5,$6,
 $7,$8,$9,
-$10,$11,$12
+$10,$11,$12,$13
 ) AS game_id`,
         [
             game.provider_id,
             game.category_id,
             game.game_type_id,
+            game.device_type_id,
             game.game_name,
             game.slug,
             game.thumbnail,
@@ -48,13 +49,14 @@ $1,$2,$3,
 $4,$5,$6,
 $7,$8,$9,
 $10,$11,$12,
-$13
+$13,$14
 ) AS success`,
         [
             id,
             game.provider_id,
             game.category_id,
             game.game_type_id,
+            game.device_type_id,
             game.game_name,
             game.slug,
             game.thumbnail,
