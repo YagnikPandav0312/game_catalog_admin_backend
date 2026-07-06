@@ -1,4 +1,4 @@
-const gameTypeRepo = require("../repositories/gameType.repository");
+const gameTypeRepo = require("../repositories/gametype.repository");
 
 async function getGameType() {
   return await gameTypeRepo.getGameType();

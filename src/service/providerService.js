@@ -10,9 +10,9 @@ async function getProvidersById(provider_id) {
 }
 
 async function createProviders(provider_name, slug, logo, public_id) {
-  // if (!provider_name || provider_name.trim() === "") {
-  //   throw new Error("Provider name is required");
-  // }
+  if (!provider_name || provider_name.trim() === "") {
+    throw new Error("Provider name is required");
+  }
   const result = await providerRepo.createProviders(
     provider_name,
     slug,

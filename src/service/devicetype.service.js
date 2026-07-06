@@ -1,4 +1,4 @@
-const repo = require("../repositories/deviceType.repository");
+const repo = require("../repositories/devicetype.repository");
 
 async function getDeviceTypes() {
   return await repo.getDeviceTypes();
@@ -9,9 +9,9 @@ async function getDeviceTypeById(id) {
 }
 
 async function createDeviceType(name, slug) {
-  // if (!name || name.trim() === "") {
-  //   throw new Error("Device type name is required");
-  // }
+  if (!name || name.trim() === "") {
+    throw new Error("Device type name is required");
+  }
   return await repo.createDeviceType(name, slug);
 }
 
