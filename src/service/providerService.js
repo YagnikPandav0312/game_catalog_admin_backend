@@ -19,7 +19,7 @@ async function createProviders(provider_name, slug, logo, public_id) {
     logo,
     public_id,
   );
-  if (!result.code === 0) {
+  if (result.code !== 0) {
     return null;
   }
   return result;
@@ -39,7 +39,7 @@ async function updateProviders(
     logo,
     public_id,
   );
-  if (!result.code === 0) {
+  if (result.code !== 0) {
     return null;
   }
   return result;
@@ -47,7 +47,7 @@ async function updateProviders(
 
 async function deleteProviders(provider_id) {
   const result = await providerRepo.deleteProviders(provider_id);
-  if (!result.code === 0) {
+  if (result.code !== 0) {
     return null;
   }
   return result;

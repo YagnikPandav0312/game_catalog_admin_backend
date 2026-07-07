@@ -10,7 +10,7 @@ async function getGameById(id) {
 
 async function createGame(game) {
     const result = await repo.createGame(game);
-    if (!result.code === 0) {
+    if (result.code !== 0) {
         return null;
     }
     return result;
@@ -18,7 +18,7 @@ async function createGame(game) {
 
 async function updateGame(id, game) {
     const result = await repo.updateGame(id, game);
-    if (!result.code === 0) {
+    if (result.code !== 0) {
         return null;
     }
     return result;
@@ -26,7 +26,7 @@ async function updateGame(id, game) {
 
 async function deleteGame(id) {
     const result = await repo.deleteGame(id);
-    if (!result.code === 0) {
+    if (result.code !== 0) {
         return null;
     }
     return result;

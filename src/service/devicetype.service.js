@@ -10,7 +10,7 @@ async function getDeviceTypeById(id) {
 
 async function createDeviceType(name, slug) {
   const result = await repo.createDeviceType(name, slug);
-  if (!result.code === 0) {
+  if (result.code !== 0) {
     return null;
   }
   return result;
@@ -18,7 +18,7 @@ async function createDeviceType(name, slug) {
 
 async function updateDeviceType(id, name, slug) {
   const result = await repo.updateDeviceType(id, name, slug);
-  if (!result.code === 0) {
+  if (result.code !== 0) {
     return null;
   }
   return result;
@@ -26,7 +26,7 @@ async function updateDeviceType(id, name, slug) {
 
 async function deleteDeviceType(id) {
   const result = await repo.deleteDeviceType(id);
-  if (!result.code === 0) {
+  if (result.code !== 0) {
     return null;
   }
   return result;
