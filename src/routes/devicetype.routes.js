@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const verifyToken = require("../middlewares/auth.middleware");
 
 const {
   getDeviceTypes,
@@ -8,9 +9,9 @@ const {
   deleteDeviceType,
 } = require("../controllers/devicetype.controller");
 
-router.get("/get_device_type", getDeviceTypes);
-router.get("/get_device_type_by_id/:id", getDeviceTypeById);
-router.post("/create_device_type", createDeviceType);
-router.put("/update_device_type/:id", updateDeviceType);
-router.delete("/delete_device_type/:id", deleteDeviceType);
+router.get("/get_device_type", verifyToken, getDeviceTypes);
+router.get("/get_device_type_by_id/:id", verifyToken, getDeviceTypeById);
+router.post("/create_device_type", verifyToken, createDeviceType);
+router.put("/update_device_type/:id", verifyToken, updateDeviceType);
+router.delete("/delete_device_type/:id", verifyToken, deleteDeviceType);
 module.exports = router;

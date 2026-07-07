@@ -13,9 +13,6 @@ async function createGameCategory(name, slug) {
     throw new Error("Game Category Name Is Required");
   }
   const result = await gameCategoryRepo.createGameCategory(name, slug);
-  if (result.code !== 0) {
-    return null;
-  }
   return result;
 }
 

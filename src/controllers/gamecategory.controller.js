@@ -52,7 +52,7 @@ async function createGameCategory(req, res) {
   try {
     const { game_categorie_name, slug } = req.body || {};
     const result = await service.createGameCategory(game_categorie_name, slug);
-    return res.status(201).json({
+    return res.status(result.code === 0 ? 201 : 400).json({
       status: {
         code: result.code,
         message: result.message
