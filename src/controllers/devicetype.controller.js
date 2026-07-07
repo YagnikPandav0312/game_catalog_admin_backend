@@ -11,7 +11,7 @@ async function getDeviceTypes(req, res) {
       }
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       status: {
         code: 2,
         message: error.message
@@ -39,7 +39,7 @@ async function getDeviceTypeById(req, res) {
       }
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       status: {
         code: 2,
         message: error.message
@@ -59,7 +59,7 @@ async function createDeviceType(req, res) {
       }
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       status: {
         code: 2,
         message: error.message
@@ -91,7 +91,7 @@ async function updateDeviceType(req, res) {
       }
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       status: {
         code: 2,
         message: error.message
@@ -112,14 +112,13 @@ async function deleteDeviceType(req, res) {
       });
     }
     return res.status(200).json({
-      data: result,
       status: {
-        code: 0,
-        message: "Device Type Deleted Successfully",
+        code: result.code,
+        message: result.message
       }
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       status: {
         code: 2,
         message: error.message

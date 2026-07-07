@@ -12,12 +12,16 @@ async function createGameCategory(name, slug) {
   if (!name || name.trim() === "") {
     throw new Error("Game Category Name Is Required");
   }
-  return await gameCategoryRepo.createGameCategory(name, slug);
+  const result = await gameCategoryRepo.createGameCategory(name, slug);
+  if (!result.code === 0) {
+    return null;
+  }
+  return result;
 }
 
 async function updateGameCategory(id, name, slug) {
   const result = await gameCategoryRepo.updateGameCategory(id, name, slug);
-  if (!result.success) {
+  if (!result.code === 0) {
     return null;
   }
   return result;
@@ -25,7 +29,7 @@ async function updateGameCategory(id, name, slug) {
 
 async function deleteGameCategory(id) {
   const result = await gameCategoryRepo.deleteGameCategory(id);
-  if (!result.success) {
+  if (!result.code === 0) {
     return null;
   }
   return result;

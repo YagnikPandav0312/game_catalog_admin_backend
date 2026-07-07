@@ -28,8 +28,9 @@ async function updateDeviceType(id, name, slug) {
 }
 
 async function deleteDeviceType(id) {
-  const query = `SELECT delete_device_type($1) AS success`;
-  const result = await pool.query(query, [id]);
+  const query = `SELECT * FROM delete_device_type($1) AS success`;
+  const values = [id];
+  const result = await pool.query(query, values);
   return result.rows[0];
 }
 

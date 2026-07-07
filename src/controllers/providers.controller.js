@@ -5,12 +5,19 @@ async function getProviders(req, res) {
   try {
     const result = await providerService.getProviders();
     return res.status(200).json({
-      success: true,
-      message: "Providers Fetched successfully",
       data: result,
+      status: {
+        code: 0,
+        message: "Providers Fetched successfully",
+      }
     });
   } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({
+      status: {
+        code: 2,
+        message: error.message
+      }
+    });
   }
 }
 
@@ -19,19 +26,25 @@ async function getProvidersById(req, res) {
     const result = await providerService.getProvidersById(req.params.id);
     if (!result) {
       return res.status(404).json({
-        success: false,
-        message: "Provider not found",
+        status: {
+          code: 1,
+          message: "Provider not found",
+        }
       });
     }
-    res.status(200).json({
-      success: true,
-      message: "Provider Fetched Successfully",
+    return res.status(200).json({
       data: result,
+      status: {
+        code: 0,
+        message: "Provider Fetched Successfully",
+      }
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
+    return res.status(500).json({
+      status: {
+        code: 2,
+        message: error.message
+      }
     });
   }
 }
@@ -47,15 +60,18 @@ async function createProviders(req, res) {
       logo,
       public_id,
     );
-    res.status(200).json({
-      success: true,
-      message: "Provider Created Successfully",
-      data: result,
+    return res.status(201).json({
+      status: {
+        code: result.code,
+        message: result.message
+      }
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
+    return res.status(500).json({
+      status: {
+        code: 2,
+        message: error.message
+      }
     });
   }
 }
@@ -67,8 +83,10 @@ async function updateProviders(req, res) {
     const provider = await providerService.getProvidersById(id);
     if (!provider) {
       return res.status(404).json({
-        success: false,
-        message: "Provider not found",
+        status: {
+          code: 1,
+          message: "Provider not found",
+        }
       });
     }
     let logo = provider.logo;
@@ -89,19 +107,24 @@ async function updateProviders(req, res) {
     );
     if (!result) {
       return res.status(400).json({
-        success: false,
-        message: "Update Provider Failed",
+        status: {
+          code: 1,
+          message: "Update Provider Failed",
+        }
       });
     }
-    res.status(200).json({
-      success: true,
-      message: "Updated Provider Successfully",
-      data: result,
+    return res.status(200).json({
+      status: {
+        code: result.code,
+        message: result.message
+      }
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
+    return res.status(500).json({
+      status: {
+        code: 2,
+        message: error.message
+      }
     });
   }
 }
@@ -112,16 +135,20 @@ async function deleteProviders(req, res) {
     const provider = await providerService.getProvidersById(id);
     if (!provider) {
       return res.status(404).json({
-        success: false,
-        message: "Provider not found",
+        status: {
+          code: 1,
+          message: "Provider not found",
+        }
       });
     }
 
     const result = await providerService.deleteProviders(id);
     if (!result) {
       return res.status(400).json({
-        success: false,
-        message: "Delete Provider Failed",
+        status: {
+          code: 1,
+          message: "Delete Provider Failed",
+        }
       });
     }
 
@@ -129,15 +156,18 @@ async function deleteProviders(req, res) {
       await cloudinary.uploader.destroy(provider.public_id);
     }
 
-    res.status(200).json({
-      success: true,
-      message: "Deleted Provider Successfully",
-      data: result,
+    return res.status(200).json({
+      status: {
+        code: result.code,
+        message: result.message
+      }
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
+    return res.status(500).json({
+      status: {
+        code: 2,
+        message: error.message
+      }
     });
   }
 }

@@ -14,21 +14,21 @@ async function getGameCategoryById(id) {
 }
 
 async function createGameCategory(name, slug) {
-  const query = `SELECT create_game_category($1, $2) AS id`;
+  const query = `SELECT * FROM create_game_category($1, $2)`;
   const values = [name, slug];
   const result = await pool.query(query, values);
   return result.rows[0];
 }
 
 async function updateGameCategory(id, name, slug) {
-  const query = `SELECT update_game_category($1, $2, $3) AS success`;
+  const query = `SELECT * FROM update_game_category($1, $2, $3) AS success`;
   const values = [id, name, slug];
   const result = await pool.query(query, values);
   return result.rows[0];
 }
 
 async function deleteGameCategory(id) {
-  const query = `SELECT delete_game_category($1) AS success`;
+  const query = `SELECT * FROM delete_game_category($1) AS success`;
   const values = [id];
   const result = await pool.query(query, values);
   return result.rows[0];

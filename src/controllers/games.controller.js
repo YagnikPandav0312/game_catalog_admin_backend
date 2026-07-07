@@ -2,17 +2,21 @@ const service = require("../service/games.service");
 
 async function getGames(req, res) {
     try {
-        const data = await service.getGames();
+        const result = await service.getGames();
         res.status(200).json({
-            success: true,
-            message: "Games fetched successfully",
-            data
+            data: result,
+            status: {
+                code: 0,
+                message: "Games fetched successfully",
+            }
         });
     }
     catch (error) {
         res.status(500).json({
-            success: false,
-            message: error.message
+            status: {
+                code: 2,
+                message: error.message
+            }
         });
     }
 }
@@ -22,21 +26,27 @@ async function getGameById(req, res) {
         const result = await service.getGameById(req.params.id);
         if (!result) {
             return res.status(404).json({
-                success: false,
-                message: "Game not found",
+                status: {
+                    code: 1,
+                    message: "Game not found",
+                }
             });
         }
 
         res.status(200).json({
-            success: true,
-            message: "Game fetched successfully",
             data: result,
+            status: {
+                code: 0,
+                message: "Game fetched successfully",
+            },
         });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message,
-        });
+        return res.status(500).json({
+            status: {
+                code: 2,
+                message: error.message
+            }
+        })
     }
 }
 
@@ -55,17 +65,20 @@ async function createGame(req, res) {
         };
 
         const result = await service.createGame(payload);
-        res.status(201).json({
-            success: true,
-            message: "Game Created Successfully",
-            data: result
+        return res.status(201).json({
+            status: {
+                code: result.code,
+                message: result.message
+            }
         });
     }
 
     catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
+        return res.status(500).json({
+            status: {
+                code: 2,
+                message: error.message
+            }
         });
     }
 }
@@ -92,20 +105,25 @@ async function updateGame(req, res) {
 
         if (!result) {
             return res.status(404).json({
-                success: false,
-                message: "Game not found",
+                status: {
+                    code: 1,
+                    message: "Update Game Failed",
+                }
             });
         }
 
-        res.status(200).json({
-            success: true,
-            message: "Game Updated Successfully",
-            data: result,
+        return res.status(200).json({
+            status: {
+                code: result.code,
+                message: result.message
+            }
         });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message,
+        return res.status(500).json({
+            status: {
+                code: 2,
+                message: error.message
+            }
         });
     }
 }
@@ -118,20 +136,25 @@ async function deleteGame(req, res) {
 
         if (!result) {
             return res.status(404).json({
-                success: false,
-                message: "Game not found",
+                status: {
+                    code: 1,
+                    message: "Delete Game Failed",
+                }
             });
         }
 
-        res.status(200).json({
-            success: true,
-            message: "Game Deleted Successfully",
-            data: result,
+        return res.status(200).json({
+            status: {
+                code: result.code,
+                message: result.message
+            }
         });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message,
+        return res.status(500).json({
+            status: {
+                code: 2,
+                message: error.message
+            }
         });
     }
 }

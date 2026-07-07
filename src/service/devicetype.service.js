@@ -26,7 +26,7 @@ async function updateDeviceType(id, name, slug) {
 
 async function deleteDeviceType(id) {
   const result = await repo.deleteDeviceType(id);
-  if (!result.success) {
+  if (!result.code === 0) {
     return null;
   }
   return result;

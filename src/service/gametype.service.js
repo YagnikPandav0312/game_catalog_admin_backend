@@ -12,12 +12,16 @@ async function createGameType(game_types_name, slug) {
   if (!game_types_name || game_types_name.trim() === "") {
     throw new Error("Game Types Name Is Required");
   }
-  return await gameTypeRepo.createGameType(game_types_name, slug);
+  const result = await gameTypeRepo.createGameType(game_types_name, slug);
+  if (!result.code === 0) {
+    return null;
+  }
+  return result;
 }
 
 async function updateGameType(id, game_types_name, slug) {
   const result = await gameTypeRepo.updateGameType(id, game_types_name, slug);
-  if (!result.success) {
+  if (!result.code === 0) {
     return null;
   }
   return result;
@@ -25,7 +29,7 @@ async function updateGameType(id, game_types_name, slug) {
 
 async function deleteGameType(id) {
   const result = await gameTypeRepo.deleteGameType(id);
-  if (!result.success) {
+  if (!result.code === 0) {
     return null;
   }
   return result;

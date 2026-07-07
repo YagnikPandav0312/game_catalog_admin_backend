@@ -17,12 +17,12 @@ async function getGameById(id) {
 
 async function createGame(game) {
     const result = await pool.query(
-        `SELECT create_game(
+        `SELECT * FROM create_game(
 $1,$2,$3,
 $4,$5,$6,
 $7,$8,$9,
 $10,$11,$12,$13
-) AS game_id`,
+)`,
         [
             game.provider_id,
             game.category_id,
@@ -44,7 +44,7 @@ $10,$11,$12,$13
 
 async function updateGame(id, game) {
     const result = await pool.query(
-        `SELECT update_game(
+        `SELECT * FROM update_game(
 $1,$2,$3,
 $4,$5,$6,
 $7,$8,$9,
@@ -73,7 +73,7 @@ $13,$14
 
 async function deleteGame(id) {
     const result = await pool.query(
-        `SELECT delete_game($1) AS success`,
+        `SELECT * FROM delete_game($1) AS success`,
         [id]
     );
     return result.rows[0];

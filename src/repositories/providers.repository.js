@@ -27,14 +27,14 @@ async function updateProvider(
   logo,
   public_id,
 ) {
-  const query = `SELECT update_providers($1, $2, $3, $4, $5) AS success`;
+  const query = `SELECT * FROM update_providers($1, $2, $3, $4, $5) AS success`;
   const values = [provider_id, provider_name, slug, logo, public_id];
   const result = await pool.query(query, values);
   return result.rows[0];
 }
 
 async function deleteProviders(provider_id) {
-  const query = `SELECT delete_providers($1) AS success`;
+  const query = `SELECT * FROM delete_providers($1) AS success`;
   const values = [provider_id];
   const result = await pool.query(query, values);
   return result.rows[0];
