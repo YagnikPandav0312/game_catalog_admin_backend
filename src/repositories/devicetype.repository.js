@@ -1,45 +1,105 @@
 const pool = require("../config/db");
 
-async function getDeviceTypes(page, limit, search) {
-  const query = `SELECT * FROM get_device_types($1, $2, $3)`;
-  const values = [page, limit, search];
-  const result = await pool.query(query, values);
-  return result.rows;
+async function getDeviceTypes(page, limit, search, sort_by, sort_order) {
+  let client;
+  try {
+    client = await pool.connect();
+    const query = `SELECT * FROM get_device_types($1, $2, $3, $4, $5)`;
+    const values = [page, limit, search, sort_by, sort_order];
+    const result = await client.query(query, values);
+    return result.rows;
+  } catch (error) {
+    console.error("Error fetching device types:", error);
+  } finally {
+    if (client) {
+      client.release();
+    }
+  }
 }
 
 async function getDeviceTypeById(id) {
-  const query = `SELECT * FROM get_device_type_by_id($1)`;
-  const values = [id];
-  const result = await pool.query(query, values);
-  return result.rows[0];
+  let client;
+  try {
+    client = await pool.connect();
+    const query = `SELECT * FROM get_device_type_by_id($1)`;
+    const values = [id];
+    const result = await client.query(query, values);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error fetching device type by ID:", error);
+  } finally {
+    if (client) {
+      client.release();
+    }
+  }
 }
 
 async function createDeviceType(name, slug) {
-  const query = `SELECT * FROM create_device_type($1, $2)`;
-  const values = [name, slug];
-  const result = await pool.query(query, values);
-  return result.rows[0];
+  let client;
+  try {
+    client = await pool.connect();
+    const query = `SELECT * FROM create_device_type($1, $2)`;
+    const values = [name, slug];
+    const result = await client.query(query, values);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error creating device type:", error);
+  } finally {
+    if (client) {
+      client.release();
+    }
+  }
 }
 
 async function updateDeviceType(id, name, slug) {
-  const query = `SELECT * FROM update_device_type($1, $2, $3) AS success`;
-  const values = [id, name, slug];
-  const result = await pool.query(query, values);
-  return result.rows[0];
+  let client;
+  try {
+    client = await pool.connect();
+    const query = `SELECT * FROM update_device_type($1, $2, $3) AS success`;
+    const values = [id, name, slug];
+    const result = await client.query(query, values);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error updating device type:", error);
+  } finally {
+    if (client) {
+      client.release();
+    }
+  }
 }
 
 async function deleteDeviceType(id) {
-  const query = `SELECT * FROM delete_device_type($1) AS success`;
-  const values = [id];
-  const result = await pool.query(query, values);
-  return result.rows[0];
+  let client;
+  try {
+    client = await pool.connect();
+    const query = `SELECT * FROM delete_device_type($1) AS success`;
+    const values = [id];
+    const result = await client.query(query, values);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error deleting device type:", error);
+  } finally {
+    if (client) {
+      client.release();
+    }
+  }
 }
 
 async function updateDeviceTypeStatus(id, status) {
-  const query = `SELECT * FROM update_device_type_status($1, $2) AS success`;
-  const values = [id, status];
-  const result = await pool.query(query, values);
-  return result.rows[0];
+  let client;
+  try {
+    client = await pool.connect();
+    const query = `SELECT * FROM update_device_type_status($1, $2) AS success`;
+    const values = [id, status];
+    const result = await client.query(query, values);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error updating device type status:", error);
+  } finally {
+    if (client) {
+      client.release();
+    }
+  }
 }
 
 module.exports = {

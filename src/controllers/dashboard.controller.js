@@ -3,7 +3,7 @@ const dashboardService = require("../service/dashboard.service");
 async function getDashboardStatistics(req, res) {
   try {
     const result = await dashboardService.getDashboardStatistics();
-    
+
     // Parse numeric/bigint fields from PostgreSQL return type to integer
     const statistics = {
       total_games: result ? parseInt(result.total_games, 10) : 0,
@@ -17,14 +17,15 @@ async function getDashboardStatistics(req, res) {
       status: {
         code: 0,
         message: "Dashboard statistics fetched successfully",
-      }
+      },
     });
   } catch (error) {
     return res.status(500).json({
       status: {
         code: 2,
-        message: error.message
-      }
+        error: error.message,
+        message: "something went wrong",
+      },
     });
   }
 }

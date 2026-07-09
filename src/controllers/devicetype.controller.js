@@ -4,22 +4,24 @@ async function getDeviceTypes(req, res) {
   try {
     const { page, limit, search } = req.body || {};
     const result = await service.getDeviceTypes(page, limit, search);
-    const totalRecords = result.length > 0 ? parseInt(result[0].total_records, 10) : 0;
+    const totalRecords =
+      result.length > 0 ? parseInt(result[0].total_records, 10) : 0;
     const data = result.map(({ total_records, ...rest }) => rest);
     return res.status(200).json({
       data: data,
       total_records: totalRecords,
       status: {
         code: 0,
-        message: "Device Types Fetched Successfully"
-      }
+        message: "Device Types Fetched Successfully",
+      },
     });
   } catch (error) {
     return res.status(500).json({
       status: {
         code: 2,
-        message: error.message
-      }
+        error: error.message,
+        message: "something went wrong",
+      },
     });
   }
 }
@@ -31,8 +33,8 @@ async function getDeviceTypeById(req, res) {
       return res.status(404).json({
         status: {
           code: 1,
-          message: "Device Type Not Found"
-        }
+          message: "Device Type Not Found",
+        },
       });
     }
     return res.status(200).json({
@@ -40,14 +42,15 @@ async function getDeviceTypeById(req, res) {
       status: {
         code: 0,
         message: "Device Type Fetched Successfully",
-      }
+      },
     });
   } catch (error) {
     return res.status(500).json({
       status: {
         code: 2,
-        message: error.message
-      }
+        error: error.message,
+        message: "something went wrong",
+      },
     });
   }
 }
@@ -59,15 +62,16 @@ async function createDeviceType(req, res) {
     return res.status(201).json({
       status: {
         code: result.code,
-        message: result.message
-      }
+        message: result.message,
+      },
     });
   } catch (error) {
     return res.status(500).json({
       status: {
         code: 2,
-        message: error.message
-      }
+        error: error.message,
+        message: "something went wrong",
+      },
     });
   }
 }
@@ -85,21 +89,22 @@ async function updateDeviceType(req, res) {
         status: {
           code: 1,
           message: "Update Device Type Failed",
-        }
+        },
       });
     }
     return res.status(200).json({
       status: {
         code: result.code,
-        message: result.message
-      }
+        message: result.message,
+      },
     });
   } catch (error) {
     return res.status(500).json({
       status: {
         code: 2,
-        message: error.message
-      }
+        error: error.message,
+        message: "something went wrong",
+      },
     });
   }
 }
@@ -112,21 +117,22 @@ async function deleteDeviceType(req, res) {
         status: {
           code: 1,
           message: "Delete Device Type Failed",
-        }
+        },
       });
     }
     return res.status(200).json({
       status: {
         code: result.code,
-        message: result.message
-      }
+        message: result.message,
+      },
     });
   } catch (error) {
     return res.status(500).json({
       status: {
         code: 2,
-        message: error.message
-      }
+        error: error.message,
+        message: "something went wrong",
+      },
     });
   }
 }
@@ -140,8 +146,8 @@ async function updateDeviceTypeStatus(req, res) {
       return res.status(400).json({
         status: {
           code: 1,
-          message: "Status is required (use 'status' or 'is_active')"
-        }
+          message: "Status is required (use 'status' or 'is_active')",
+        },
       });
     }
     const result = await service.updateDeviceTypeStatus(id, newStatus);
@@ -149,22 +155,23 @@ async function updateDeviceTypeStatus(req, res) {
       return res.status(400).json({
         status: {
           code: 1,
-          message: "Update Device Type Status Failed"
-        }
+          message: "Update Device Type Status Failed",
+        },
       });
     }
     return res.status(result.code === 0 ? 200 : 400).json({
       status: {
         code: result.code,
-        message: result.message
-      }
+        message: result.message,
+      },
     });
   } catch (error) {
     return res.status(500).json({
       status: {
         code: 2,
-        message: error.message
-      }
+        error: error.message,
+        message: "something went wrong",
+      },
     });
   }
 }

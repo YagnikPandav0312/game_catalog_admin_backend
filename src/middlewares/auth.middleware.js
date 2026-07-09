@@ -14,7 +14,7 @@ function verifyToken(req, res, next) {
         token = token.slice(7, token.length);
     }
     const decoded = jwtVerify(token);
-    if (!decoded) {
+    if (!decoded) {``
         return res.status(401).json({
             status: {
                 code: 1,

@@ -3,9 +3,16 @@ const cloudinary = require("../config/cloudinary");
 
 async function getProviders(req, res) {
   try {
-    const { page, limit, search } = req.body || {};
-    const result = await providerService.getProviders(page, limit, search);
-    const totalRecords = result.length > 0 ? parseInt(result[0].total_records, 10) : 0;
+    const { page, limit, search, sort_by, sort_order } = req.body || {};
+    const result = await providerService.getProviders(
+      page,
+      limit,
+      search,
+      sort_by,
+      sort_order,
+    );
+    const totalRecords =
+      result.length > 0 ? parseInt(result[0].total_records, 10) : 0;
     const data = result.map(({ total_records, ...rest }) => rest);
     return res.status(200).json({
       data: data,
@@ -13,14 +20,15 @@ async function getProviders(req, res) {
       status: {
         code: 0,
         message: "Providers Fetched successfully",
-      }
+      },
     });
   } catch (error) {
     return res.status(500).json({
       status: {
         code: 2,
-        message: error.message
-      }
+        error: error.message,
+        message: "something went wrong",
+      },
     });
   }
 }
@@ -33,7 +41,7 @@ async function getProvidersById(req, res) {
         status: {
           code: 1,
           message: "Provider not found",
-        }
+        },
       });
     }
     return res.status(200).json({
@@ -41,14 +49,15 @@ async function getProvidersById(req, res) {
       status: {
         code: 0,
         message: "Provider Fetched Successfully",
-      }
+      },
     });
   } catch (error) {
     return res.status(500).json({
       status: {
         code: 2,
-        message: error.message
-      }
+        error: error.message,
+        message: "something went wrong",
+      },
     });
   }
 }
@@ -67,15 +76,16 @@ async function createProviders(req, res) {
     return res.status(201).json({
       status: {
         code: result.code,
-        message: result.message
-      }
+        message: result.message,
+      },
     });
   } catch (error) {
     return res.status(500).json({
       status: {
         code: 2,
-        message: error.message
-      }
+        error: error.message,
+        message: "something went wrong",
+      },
     });
   }
 }
@@ -90,7 +100,7 @@ async function updateProviders(req, res) {
         status: {
           code: 1,
           message: "Provider not found",
-        }
+        },
       });
     }
     let logo = provider.logo;
@@ -114,21 +124,22 @@ async function updateProviders(req, res) {
         status: {
           code: 1,
           message: "Update Provider Failed",
-        }
+        },
       });
     }
     return res.status(200).json({
       status: {
         code: result.code,
-        message: result.message
-      }
+        message: result.message,
+      },
     });
   } catch (error) {
     return res.status(500).json({
       status: {
         code: 2,
-        message: error.message
-      }
+        error: error.message,
+        message: "something went wrong",
+      },
     });
   }
 }
@@ -142,7 +153,7 @@ async function deleteProviders(req, res) {
         status: {
           code: 1,
           message: "Provider not found",
-        }
+        },
       });
     }
 
@@ -152,7 +163,7 @@ async function deleteProviders(req, res) {
         status: {
           code: 1,
           message: "Delete Provider Failed",
-        }
+        },
       });
     }
 
@@ -163,15 +174,16 @@ async function deleteProviders(req, res) {
     return res.status(200).json({
       status: {
         code: result.code,
-        message: result.message
-      }
+        message: result.message,
+      },
     });
   } catch (error) {
     return res.status(500).json({
       status: {
         code: 2,
-        message: error.message
-      }
+        error: error.message,
+        message: "something went wrong",
+      },
     });
   }
 }
@@ -185,8 +197,8 @@ async function updateProviderStatus(req, res) {
       return res.status(400).json({
         status: {
           code: 1,
-          message: "Status is required (use 'status' or 'is_active')"
-        }
+          message: "Status is required (use 'status' or 'is_active')",
+        },
       });
     }
     const result = await providerService.updateProviderStatus(id, newStatus);
@@ -194,22 +206,23 @@ async function updateProviderStatus(req, res) {
       return res.status(400).json({
         status: {
           code: 1,
-          message: "Update Provider Status Failed"
-        }
+          message: "Update Provider Status Failed",
+        },
       });
     }
     return res.status(result.code === 0 ? 200 : 400).json({
       status: {
         code: result.code,
-        message: result.message
-      }
+        message: result.message,
+      },
     });
   } catch (error) {
     return res.status(500).json({
       status: {
         code: 2,
-        message: error.message
-      }
+        error: error.message,
+        message: "something went wrong",
+      },
     });
   }
 }

@@ -18,7 +18,8 @@ async function getGameCategories(req, res) {
     return res.status(500).json({
       status: {
         code: 2,
-        message: error.message
+        error: error.message,
+        message: "something went wrong",
       }
     });
   }
@@ -46,7 +47,8 @@ async function getGameCategoryById(req, res) {
     return res.status(500).json({
       status: {
         code: 2,
-        message: error.message
+        error: error.message,
+        message: "something went wrong",
       }
     });
   }
@@ -66,7 +68,8 @@ async function createGameCategory(req, res) {
     return res.status(500).json({
       status: {
         code: 2,
-        message: error.message
+        error: error.message,
+        message: "something went wrong"
       }
     });
   }
@@ -94,7 +97,8 @@ async function updateGameCategory(req, res) {
     return res.status(500).json({
       status: {
         code: 2,
-        message: error.message
+        error: error.message,
+        message: "something went wrong"
       }
     });
   }
@@ -122,7 +126,8 @@ async function deleteGameCategory(req, res) {
     return res.status(500).json({
       status: {
         code: 2,
-        message: error.message
+        error: error.message,
+        message: "something went wrong"
       }
     });
   }
@@ -160,7 +165,8 @@ async function updateGameCategoryStatus(req, res) {
     return res.status(500).json({
       status: {
         code: 2,
-        message: error.message
+        error: error.message,
+        message: "something went wrong"
       }
     });
   }

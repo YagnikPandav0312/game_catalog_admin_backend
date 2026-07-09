@@ -1,10 +1,12 @@
 const providerRepo = require("../repositories/providers.repository");
 
-async function getProviders(page, limit, search) {
+async function getProviders(page, limit, search, sort_by, sort_order) {
   const pPage = (page !== undefined && page !== null && page !== '') ? parseInt(page, 10) : null;
   const pLimit = (limit !== undefined && limit !== null && limit !== '') ? parseInt(limit, 10) : null;
   const pSearch = search ? String(search) : "";
-  return await providerRepo.getProviders(pPage, pLimit, pSearch);
+  const pSortBy = sort_by ? String(sort_by) : null;
+  const pSortOrder = sort_order ? String(sort_order) : null;
+  return await providerRepo.getProviders(pPage, pLimit, pSearch, pSortBy, pSortOrder);
 }
 
 async function getProvidersById(provider_id) {
