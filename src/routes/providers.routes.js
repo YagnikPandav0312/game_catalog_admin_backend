@@ -3,6 +3,7 @@ const router = express.Router();
 const logger = require("../middlewares/logger.middleware");
 const upload = require("../middlewares/upload.middleware");
 const verifyToken = require("../middlewares/auth.middleware");
+const validate = require("../middlewares/validate.middleware");
 
 const {
   getProviders,
@@ -19,6 +20,7 @@ router.post(
   "/create_providers",
   verifyToken,
   upload.single("logo"),
+  validate("provider_name"),
   logger,
   createProviders,
 );
@@ -26,6 +28,7 @@ router.put(
   "/update_providers/:id",
   verifyToken,
   upload.single("logo"),
+  validate("provider_name"),
   logger,
   updateProviders,
 );

@@ -2,6 +2,7 @@ const router = require("express").Router();
 const logger = require("../middlewares/logger.middleware");
 const upload = require("../middlewares/upload.middleware");
 const verifyToken = require("../middlewares/auth.middleware");
+const validate = require("../middlewares/validate.middleware");
 
 const {
     getGames,
@@ -14,8 +15,8 @@ const {
 
 router.post("/get_game", verifyToken, logger, getGames);
 router.get("/get_game_by_id/:id", verifyToken, logger, getGameById);
-router.post("/create_game", verifyToken, upload.single("thumbnail"), logger, createGame);
-router.put("/update_game/:id", verifyToken, upload.single("thumbnail"), logger, updateGame);
+router.post("/create_game", verifyToken, upload.single("thumbnail"), validate("game_name"), logger, createGame);
+router.put("/update_game/:id", verifyToken, upload.single("thumbnail"), validate("game_name"), logger, updateGame);
 router.delete("/delete_game/:id", verifyToken, logger, deleteGame);
 router.put("/update_game_status/:id", verifyToken, logger, updateGameStatus);
 

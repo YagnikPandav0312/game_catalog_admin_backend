@@ -1,14 +1,23 @@
-function validate(req, res, next) {
-  const { provider_name } = req.body;
+const Joi = require("joi");
 
-  if (!provider_name) {
-    return res.status(400).json({
-      success: false,
-      message: "provider_name required",
+const validate = (fieldName) => {
+  return (req, res, next) => {
+    const schema = Joi.object({
+      [fieldName]: Joi.string().trim().required().messages({
+        "any.required": `${fieldName} required`,
+        "string.empty": `${fieldName} required`,
+      }),
     });
-  }
 
-  next();
-}
+    const { error } = schema.validate(req.body, { abortEarly: false, allowUnknown: true });
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.details[0].message,
+      });
+    }
+    next();
+  };
+};
 
 module.exports = validate;
