@@ -35,10 +35,18 @@ async function deleteGameType(id) {
   return result.rows[0];
 }
 
+async function updateGameTypeStatus(id, status) {
+  const query = "SELECT * FROM update_game_type_status($1, $2) AS success";
+  const values = [id, status];
+  const result = await pool.query(query, values);
+  return result.rows[0];
+}
+
 module.exports = {
   createGameType,
   getGameType,
   getGameTypeById,
   updateGameType,
   deleteGameType,
+  updateGameTypeStatus,
 };

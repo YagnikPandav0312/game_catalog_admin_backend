@@ -41,10 +41,18 @@ async function deleteProviders(provider_id) {
   return result.rows[0];
 }
 
+async function updateProviderStatus(provider_id, status) {
+  const query = `SELECT * FROM update_provider_status($1, $2) AS success`;
+  const values = [provider_id, status];
+  const result = await pool.query(query, values);
+  return result.rows[0];
+}
+
 module.exports = {
   getProviders,
   getProviderById,
   createProviders,
   updateProvider,
   deleteProviders,
+  updateProviderStatus,
 };

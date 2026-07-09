@@ -35,10 +35,15 @@ async function deleteGameCategory(id) {
   return result;
 }
 
+async function updateGameCategoryStatus(id, status) {
+  return await gameCategoryRepo.updateGameCategoryStatus(id, status);
+}
+
 module.exports = {
   getGameCategories,
   getGameCategoryById,
   createGameCategory,
   updateGameCategory,
   deleteGameCategory,
+  updateGameCategoryStatus,
 };

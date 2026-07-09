@@ -35,10 +35,18 @@ async function deleteGameCategory(id) {
   return result.rows[0];
 }
 
+async function updateGameCategoryStatus(id, status) {
+  const query = `SELECT * FROM update_game_category_status($1, $2) AS success`;
+  const values = [id, status];
+  const result = await pool.query(query, values);
+  return result.rows[0];
+}
+
 module.exports = {
   getGameCategories,
   getGameCategoryById,
   createGameCategory,
   updateGameCategory,
   deleteGameCategory,
+  updateGameCategoryStatus,
 };

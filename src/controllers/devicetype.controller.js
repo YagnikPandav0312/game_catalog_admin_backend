@@ -131,10 +131,49 @@ async function deleteDeviceType(req, res) {
   }
 }
 
+async function updateDeviceTypeStatus(req, res) {
+  try {
+    const { id } = req.params;
+    const { status, is_active } = req.body || {};
+    const newStatus = status !== undefined ? status : is_active;
+    if (newStatus === undefined) {
+      return res.status(400).json({
+        status: {
+          code: 1,
+          message: "Status is required (use 'status' or 'is_active')"
+        }
+      });
+    }
+    const result = await service.updateDeviceTypeStatus(id, newStatus);
+    if (!result) {
+      return res.status(400).json({
+        status: {
+          code: 1,
+          message: "Update Device Type Status Failed"
+        }
+      });
+    }
+    return res.status(result.code === 0 ? 200 : 400).json({
+      status: {
+        code: result.code,
+        message: result.message
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: {
+        code: 2,
+        message: error.message
+      }
+    });
+  }
+}
+
 module.exports = {
   getDeviceTypes,
   getDeviceTypeById,
   createDeviceType,
   updateDeviceType,
   deleteDeviceType,
+  updateDeviceTypeStatus,
 };

@@ -35,10 +35,18 @@ async function deleteDeviceType(id) {
   return result.rows[0];
 }
 
+async function updateDeviceTypeStatus(id, status) {
+  const query = `SELECT * FROM update_device_type_status($1, $2) AS success`;
+  const values = [id, status];
+  const result = await pool.query(query, values);
+  return result.rows[0];
+}
+
 module.exports = {
   getDeviceTypes,
   getDeviceTypeById,
   createDeviceType,
   updateDeviceType,
   deleteDeviceType,
+  updateDeviceTypeStatus,
 };

@@ -10,6 +10,7 @@ const {
   createProviders,
   updateProviders,
   deleteProviders,
+  updateProviderStatus,
 } = require("../controllers/providers.controller");
 
 router.post("/get_providers", verifyToken, logger, getProviders);
@@ -29,5 +30,6 @@ router.put(
   updateProviders,
 );
 router.delete("/delete_provider/:id", verifyToken, logger, deleteProviders);
+router.put("/update_provider_status/:id", verifyToken, logger, updateProviderStatus);
 
 module.exports = router;

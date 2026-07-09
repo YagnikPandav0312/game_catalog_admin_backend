@@ -35,10 +35,15 @@ async function deleteDeviceType(id) {
   return result;
 }
 
+async function updateDeviceTypeStatus(id, status) {
+  return await DeviceTypeRepo.updateDeviceTypeStatus(id, status);
+}
+
 module.exports = {
   getDeviceTypes,
   getDeviceTypeById,
   createDeviceType,
   updateDeviceType,
   deleteDeviceType,
+  updateDeviceTypeStatus,
 };

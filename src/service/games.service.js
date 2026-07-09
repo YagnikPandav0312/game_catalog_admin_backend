@@ -35,10 +35,15 @@ async function deleteGame(id) {
     return result;
 }
 
+async function updateGameStatus(id, status) {
+    return await GamesRepo.updateGameStatus(id, status);
+}
+
 module.exports = {
     getGames,
     getGameById,
     createGame,
     updateGame,
-    deleteGame
+    deleteGame,
+    updateGameStatus
 };

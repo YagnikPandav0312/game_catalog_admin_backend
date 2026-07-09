@@ -15,7 +15,7 @@ async function login(req, res) {
         }
         const data = await authService.login(email, password);
         if (!data) {
-            return res.status(400).json({
+            return res.status(200).json({
                 status: {
                     code: 1,
                     message: 'Invalid Credentials'
@@ -46,7 +46,7 @@ async function register(req, res) {
         const { full_name, password, role } = req.body || {};
 
         if (!full_name || !email || !password) {
-            return res.status(400).json({
+            return res.status(200).json({
                 status: {
                     code: 1,
                     message: "Full Name, Email, And Password Are Required"

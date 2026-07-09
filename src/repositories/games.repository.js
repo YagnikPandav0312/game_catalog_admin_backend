@@ -80,10 +80,19 @@ async function deleteGame(id) {
     return result.rows[0];
 }
 
+async function updateGameStatus(id, status) {
+    const result = await pool.query(
+        `SELECT * FROM update_game_status($1, $2) AS success`,
+        [id, status]
+    );
+    return result.rows[0];
+}
+
 module.exports = {
     getGames,
     getGameById,
     createGame,
     updateGame,
-    deleteGame
+    deleteGame,
+    updateGameStatus
 };

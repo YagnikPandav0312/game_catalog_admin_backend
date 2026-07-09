@@ -38,10 +38,15 @@ async function deleteGameType(id) {
   return result;
 }
 
+async function updateGameTypeStatus(id, status) {
+  return await gameTypeRepo.updateGameTypeStatus(id, status);
+}
+
 module.exports = {
   createGameType,
   getGameType,
   getGameTypeById,
   updateGameType,
   deleteGameType,
+  updateGameTypeStatus,
 };

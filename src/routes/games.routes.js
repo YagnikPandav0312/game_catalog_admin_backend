@@ -8,7 +8,8 @@ const {
     getGameById,
     createGame,
     updateGame,
-    deleteGame
+    deleteGame,
+    updateGameStatus
 } = require("../controllers/games.controller");
 
 router.post("/get_game", verifyToken, logger, getGames);
@@ -16,5 +17,6 @@ router.get("/get_game_by_id/:id", verifyToken, logger, getGameById);
 router.post("/create_game", verifyToken, upload.single("thumbnail"), logger, createGame);
 router.put("/update_game/:id", verifyToken, upload.single("thumbnail"), logger, updateGame);
 router.delete("/delete_game/:id", verifyToken, logger, deleteGame);
+router.put("/update_game_status/:id", verifyToken, logger, updateGameStatus);
 
 module.exports = router;

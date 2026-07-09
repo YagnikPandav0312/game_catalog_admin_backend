@@ -55,10 +55,15 @@ async function deleteProviders(provider_id) {
   return result;
 }
 
+async function updateProviderStatus(provider_id, status) {
+  return await providerRepo.updateProviderStatus(provider_id, status);
+}
+
 module.exports = {
   getProviders,
   getProvidersById,
   createProviders,
   updateProviders,
   deleteProviders,
+  updateProviderStatus,
 };
