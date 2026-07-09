@@ -1,8 +1,9 @@
 const pool = require("../config/db");
 
-async function getProviders() {
-  const query = `SELECT * FROM get_providers()`;
-  const result = await pool.query(query);
+async function getProviders(page, limit, search) {
+  const query = `SELECT * FROM get_providers($1, $2, $3)`;
+  const values = [page, limit, search];
+  const result = await pool.query(query, values);
   return result.rows;
 }
 

@@ -26,7 +26,7 @@ async function login(req, res) {
             data,
             status: {
                 code: 0,
-                message: 'Login Successful'
+                message: 'Login Successfully !'
             }
         });
     }

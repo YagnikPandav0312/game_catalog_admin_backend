@@ -1,8 +1,10 @@
 const providerRepo = require("../repositories/providers.repository");
 
-async function getProviders() {
-  const result = await providerRepo.getProviders();
-  return result;
+async function getProviders(page, limit, search) {
+  const pPage = (page !== undefined && page !== null && page !== '') ? parseInt(page, 10) : null;
+  const pLimit = (limit !== undefined && limit !== null && limit !== '') ? parseInt(limit, 10) : null;
+  const pSearch = search ? String(search) : "";
+  return await providerRepo.getProviders(pPage, pLimit, pSearch);
 }
 
 async function getProvidersById(provider_id) {

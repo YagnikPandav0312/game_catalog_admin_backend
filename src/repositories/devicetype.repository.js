@@ -1,8 +1,9 @@
 const pool = require("../config/db");
 
-async function getDeviceTypes() {
-  const query = `SELECT * FROM get_device_types()`;
-  const result = await pool.query(query);
+async function getDeviceTypes(page, limit, search) {
+  const query = `SELECT * FROM get_device_types($1, $2, $3)`;
+  const values = [page, limit, search];
+  const result = await pool.query(query, values);
   return result.rows;
 }
 

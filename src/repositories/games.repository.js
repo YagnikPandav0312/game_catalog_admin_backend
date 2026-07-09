@@ -1,8 +1,9 @@
 const pool = require("../config/db");
 
-async function getGames() {
+async function getGames(page, limit, search) {
     const result = await pool.query(
-        `SELECT * FROM get_games()`
+        `SELECT * FROM get_games($1, $2, $3)`,
+        [page, limit, search]
     );
     return result.rows;
 }

@@ -1,7 +1,10 @@
 const gameTypeRepo = require("../repositories/gametype.repository");
 
-async function getGameType() {
-  return await gameTypeRepo.getGameType();
+async function getGameType(page, limit, search) {
+  const pPage = (page !== undefined && page !== null && page !== '') ? parseInt(page, 10) : null;
+  const pLimit = (limit !== undefined && limit !== null && limit !== '') ? parseInt(limit, 10) : null;
+  const pSearch = search ? String(search) : "";
+  return await gameTypeRepo.getGameType(pPage, pLimit, pSearch);
 }
 
 async function getGameTypeById(game_type_id) {

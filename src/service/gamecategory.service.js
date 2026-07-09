@@ -1,7 +1,10 @@
 const gameCategoryRepo = require("../repositories/gamecategory.repository");
 
-async function getGameCategories() {
-  return await gameCategoryRepo.getGameCategories();
+async function getGameCategories(page, limit, search) {
+  const pPage = (page !== undefined && page !== null && page !== '') ? parseInt(page, 10) : null;
+  const pLimit = (limit !== undefined && limit !== null && limit !== '') ? parseInt(limit, 10) : null;
+  const pSearch = search ? String(search) : "";
+  return await gameCategoryRepo.getGameCategories(pPage, pLimit, pSearch);
 }
 
 async function getGameCategoryById(id) {

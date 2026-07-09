@@ -12,7 +12,7 @@ const {
   deleteProviders,
 } = require("../controllers/providers.controller");
 
-router.get("/get_providers", verifyToken, logger, getProviders);
+router.post("/get_providers", verifyToken, logger, getProviders);
 router.get("/get_provider_by_id/:id", verifyToken, logger, getProvidersById);
 router.post(
   "/create_providers",

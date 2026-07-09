@@ -2,9 +2,13 @@ const service = require("../service/games.service");
 
 async function getGames(req, res) {
     try {
-        const result = await service.getGames();
+        const { page, limit, search } = req.body || {};
+        const result = await service.getGames(page, limit, search);
+        const totalRecords = result.length > 0 ? parseInt(result[0].total_records, 10) : 0;
+        const data = result.map(({ total_records, ...rest }) => rest);
         res.status(200).json({
-            data: result,
+            data: data,
+            total_records: totalRecords,
             status: {
                 code: 0,
                 message: "Games fetched successfully",

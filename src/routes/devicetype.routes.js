@@ -9,7 +9,7 @@ const {
   deleteDeviceType,
 } = require("../controllers/devicetype.controller");
 
-router.get("/get_device_type", verifyToken, getDeviceTypes);
+router.post("/get_device_type", verifyToken, getDeviceTypes);
 router.get("/get_device_type_by_id/:id", verifyToken, getDeviceTypeById);
 router.post("/create_device_type", verifyToken, createDeviceType);
 router.put("/update_device_type/:id", verifyToken, updateDeviceType);

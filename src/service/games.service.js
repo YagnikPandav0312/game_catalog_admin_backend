@@ -1,15 +1,18 @@
-const repo = require("../repositories/games.repository");
+const GamesRepo = require("../repositories/games.repository");
 
-async function getGames() {
-    return await repo.getGames();
+async function getGames(page, limit, search) {
+  const pPage = (page !== undefined && page !== null && page !== '') ? parseInt(page, 10) : null;
+  const pLimit = (limit !== undefined && limit !== null && limit !== '') ? parseInt(limit, 10) : null;
+  const pSearch = search ? String(search) : "";
+  return await GamesRepo.getGames(pPage, pLimit, pSearch);
 }
 
 async function getGameById(id) {
-    return await repo.getGameById(id);
+    return await GamesRepo.getGameById(id);
 }
 
 async function createGame(game) {
-    const result = await repo.createGame(game);
+    const result = await GamesRepo.createGame(game);
     if (result.code !== 0) {
         return null;
     }
@@ -17,7 +20,7 @@ async function createGame(game) {
 }
 
 async function updateGame(id, game) {
-    const result = await repo.updateGame(id, game);
+    const result = await GamesRepo.updateGame(id, game);
     if (result.code !== 0) {
         return null;
     }
@@ -25,7 +28,7 @@ async function updateGame(id, game) {
 }
 
 async function deleteGame(id) {
-    const result = await repo.deleteGame(id);
+    const result = await GamesRepo.deleteGame(id);
     if (result.code !== 0) {
         return null;
     }
