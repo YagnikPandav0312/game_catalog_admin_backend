@@ -3,13 +3,14 @@ const cloudinary = require("../config/cloudinary");
 
 async function getProviders(req, res) {
   try {
-    const { page, limit, search, sort_by, sort_order } = req.body || {};
+    const { page, limit, search, sort_by, sort_order, user_id } = req.body || {};
     const result = await providerService.getProviders(
       page,
       limit,
       search,
       sort_by,
       sort_order,
+      user_id,
     );
     const totalRecords =
       result.length > 0 ? parseInt(result[0].total_records, 10) : 0;
@@ -35,7 +36,9 @@ async function getProviders(req, res) {
 
 async function getProvidersById(req, res) {
   try {
-    const result = await providerService.getProvidersById(req.params.id);
+    const {id} = req.params;
+    const {user_id} = req.body;
+    const result = await providerService.getProvidersById(id,user_id);
     if (!result) {
       return res.status(404).json({
         status: {
@@ -64,14 +67,15 @@ async function getProvidersById(req, res) {
 
 async function createProviders(req, res) {
   try {
-    const { provider_name, slug } = req.body || {};
+    const { provider_name, slug, user_id } = req.body || {};
     const logo = req.file ? req.file.path : null;
     const public_id = req.file ? req.file.filename : null;
     const result = await providerService.createProviders(
       provider_name,
       slug,
       logo,
-      public_id,
+      user_id,
+      public_id
     );
     return res.status(201).json({
       status: {
@@ -92,9 +96,8 @@ async function createProviders(req, res) {
 
 async function updateProviders(req, res) {
   try {
-    const { id } = req.params;
-    const { provider_name, slug } = req.body || {};
-    const provider = await providerService.getProvidersById(id);
+    const { provider_id, provider_name, slug, user_id } = req.body || {};
+    const provider = await providerService.getProvidersById(provider_id, user_id);
     if (!provider) {
       return res.status(404).json({
         status: {
@@ -113,11 +116,12 @@ async function updateProviders(req, res) {
       public_id = req.file.filename;
     }
     const result = await providerService.updateProviders(
-      id,
+      provider_id,
       provider_name,
       slug,
       logo,
       public_id,
+      user_id
     );
     if (!result) {
       return res.status(400).json({
@@ -146,8 +150,8 @@ async function updateProviders(req, res) {
 
 async function deleteProviders(req, res) {
   try {
-    const { id } = req.params;
-    const provider = await providerService.getProvidersById(id);
+    const { provider_id, user_id } = req.body;
+    const provider = await providerService.getProvidersById(provider_id, user_id);
     if (!provider) {
       return res.status(404).json({
         status: {
@@ -157,7 +161,7 @@ async function deleteProviders(req, res) {
       });
     }
 
-    const result = await providerService.deleteProviders(id);
+    const result = await providerService.deleteProviders(provider_id, user_id);
     if (!result) {
       return res.status(400).json({
         status: {
@@ -190,8 +194,7 @@ async function deleteProviders(req, res) {
 
 async function updateProviderStatus(req, res) {
   try {
-    const { id } = req.params;
-    const { status, is_active } = req.body || {};
+    const { status,provider_id, user_id, is_active } = req.body || {};
     const newStatus = status !== undefined ? status : is_active;
     if (newStatus === undefined) {
       return res.status(400).json({
@@ -201,7 +204,7 @@ async function updateProviderStatus(req, res) {
         },
       });
     }
-    const result = await providerService.updateProviderStatus(id, newStatus);
+    const result = await providerService.updateProviderStatus(provider_id, newStatus, user_id);
     if (!result) {
       return res.status(400).json({
         status: {

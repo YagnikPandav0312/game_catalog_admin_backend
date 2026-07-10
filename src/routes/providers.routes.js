@@ -16,8 +16,8 @@ const {
 router.post("/get_providers", verifyToken, logger, getProviders);
 router.get("/get_provider_by_id/:id", verifyToken, logger, getProvidersById);
 router.post( "/create_providers", verifyToken, upload.single("logo"), logger, createProviders);
-router.put("/update_providers/:id",verifyToken,upload.single("logo"), logger, updateProviders);
-router.delete("/delete_provider/:id", verifyToken, logger, deleteProviders);
-router.put("/update_provider_status/:id", verifyToken, logger, updateProviderStatus);
+router.post("/update_providers",verifyToken,upload.single("logo"), logger, updateProviders);
+router.post("/delete_provider", verifyToken, logger, deleteProviders);
+router.post("/update_provider_status", verifyToken, logger, updateProviderStatus);
 
 module.exports = router;

@@ -5,6 +5,6 @@ const verifyToken = require("../middlewares/auth.middleware");
 
 const { getDashboardStatistics } = require("../controllers/dashboard.controller");
 
-router.get("/statistics", verifyToken, logger, getDashboardStatistics);
+router.post("/statistics", verifyToken, logger, getDashboardStatistics);
 
 module.exports = router;

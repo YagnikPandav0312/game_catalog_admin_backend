@@ -2,9 +2,8 @@ const dashboardService = require("../service/dashboard.service");
 
 async function getDashboardStatistics(req, res) {
   try {
-    const result = await dashboardService.getDashboardStatistics();
-
-    // Parse numeric/bigint fields from PostgreSQL return type to integer
+    const { user_id } = req.body.user_id;
+    const result = await dashboardService.getDashboardStatistics(user_id);
     const statistics = {
       total_games: result ? parseInt(result.total_games, 10) : 0,
       total_providers: result ? parseInt(result.total_providers, 10) : 0,
