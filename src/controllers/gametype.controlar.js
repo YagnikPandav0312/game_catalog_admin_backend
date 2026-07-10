@@ -2,8 +2,14 @@ const service = require("../service/gametype.service");
 
 async function getGameType(req, res) {
   try {
-    const { page, limit, search } = req.body || {};
-    const result = await service.getGameType(page, limit, search);
+    const { page, limit, search, sort_by, sort_order } = req.body || {};
+    const result = await service.getGameType(
+      page,
+      limit,
+      search,
+      sort_by,
+      sort_order,
+    );
     const totalRecords =
       result.length > 0 ? parseInt(result[0].total_records, 10) : 0;
     const data = result.map(({ total_records, ...rest }) => rest);

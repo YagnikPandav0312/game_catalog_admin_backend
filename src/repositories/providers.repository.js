@@ -10,6 +10,7 @@ async function getProviders(page, limit, search, sort_by, sort_order) {
     return result.rows;
   } catch (error) {
     console.error("Error fetching providers:", error);
+    throw error;
   } finally {
     if (client) {
       client.release();
@@ -27,6 +28,7 @@ async function getProviderById(game_provider_id) {
     return result.rows[0];
   } catch (error) {
     console.error("Error fetching provider by ID:", error);
+    throw error;
   } finally {
     if (client) {
       client.release();
@@ -44,6 +46,7 @@ async function createProviders(provider_name, slug, logo, public_id) {
     return result.rows[0];
   } catch (error) {
     console.error("Error creating provider:", error);
+    throw error;
   } finally {
     if (client) {
       client.release();
@@ -67,6 +70,7 @@ async function updateProvider(
     return result.rows[0];
   } catch (error) {
     console.error("Error updating provider:", error);
+    throw error;
   } finally {
     if (client) {
       client.release();
@@ -84,6 +88,7 @@ async function deleteProviders(provider_id) {
     return result.rows[0];
   } catch (error) {
     console.error("Error deleting provider:", error);
+    throw error;
   } finally {
     if (client) {
       client.release();
@@ -101,6 +106,7 @@ async function updateProviderStatus(provider_id, status) {
     return result.rows[0];
   } catch (error) {
     console.error("Error updating provider status:", error);
+    throw error;
   } finally {
     if (client) {
       client.release();

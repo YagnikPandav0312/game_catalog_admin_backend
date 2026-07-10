@@ -34,23 +34,6 @@ async function getGameCategoryById(id) {
   }
 }
 
-async function getGameCategoryById(id) {
-  let client;
-  try {
-    client = await pool.connect();
-    const query = `SELECT * FROM get_game_category_by_id($1)`;
-    const values = [id];
-    const result = await client.query(query, values);
-    return result.rows[0];
-  } catch (error) {
-    console.error("Error fetching game category by ID:", error);
-  } finally {
-    if (client) {
-      client.release();
-    }
-  }
-}
-
 async function createGameCategory(name, slug) {
   let client;
   try {
@@ -78,23 +61,6 @@ async function updateGameCategory(id, name, slug) {
     return result.rows[0];
   } catch (error) {
     console.error("Error updating game category:", error);
-  } finally {
-    if (client) {
-      client.release();
-    }
-  }
-}
-
-async function deleteGameCategory(id) {
-  let client;
-  try {
-    client = await pool.connect();
-    const query = `SELECT * FROM delete_game_category($1) AS success`;
-    const values = [id];
-    const result = await client.query(query, values);
-    return result.rows[0];
-  } catch (error) {
-    console.error("Error deleting game category:", error);
   } finally {
     if (client) {
       client.release();
