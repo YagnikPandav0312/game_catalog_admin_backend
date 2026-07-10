@@ -1,11 +1,11 @@
 const pool = require("../config/db");
 
-async function getGameCategories(page, limit, search, sort_by, sort_order) {
+async function getGameCategories(page, limit, search, sort_by, sort_order, user_id) {
   let client;
   try {
     client = await pool.connect();
-    const query = `SELECT * FROM get_game_categories($1, $2, $3, $4, $5)`;
-    const values = [page, limit, search, sort_by, sort_order];
+    const query = `SELECT * FROM get_game_categories($1, $2, $3, $4, $5, $6)`;
+    const values = [page, limit, search, sort_by, sort_order, user_id];
     const result = await client.query(query, values);
     return result.rows;
   } catch (error) {
@@ -17,12 +17,12 @@ async function getGameCategories(page, limit, search, sort_by, sort_order) {
   }
 }
 
-async function getGameCategoryById(id) {
+async function getGameCategoryById(id, user_id) {
   let client;
   try {
     client = await pool.connect();
-    const query = `SELECT * FROM get_game_category_by_id($1)`;
-    const values = [id];
+    const query = `SELECT * FROM get_game_category_by_id($1, $2)`;
+    const values = [id, user_id];
     const result = await client.query(query, values);
     return result.rows[0];
   } catch (error) {
@@ -34,12 +34,12 @@ async function getGameCategoryById(id) {
   }
 }
 
-async function createGameCategory(name, slug) {
+async function createGameCategory(name, slug, user_id) {
   let client;
   try {
     client = await pool.connect();
-    const query = `SELECT * FROM create_game_category($1, $2)`;
-    const values = [name, slug];
+    const query = `SELECT * FROM create_game_category($1, $2, $3)`;
+    const values = [name, slug, user_id];
     const result = await client.query(query, values);
     return result.rows[0];
   } catch (error) {
@@ -51,12 +51,12 @@ async function createGameCategory(name, slug) {
   }
 }
 
-async function updateGameCategory(id, name, slug) {
+async function updateGameCategory(id, name, slug, user_id) {
   let client;
   try {
     client = await pool.connect();
-    const query = `SELECT * FROM update_game_category($1, $2, $3) AS success`;
-    const values = [id, name, slug];
+    const query = `SELECT * FROM update_game_category($1, $2, $3, $4) AS success`;
+    const values = [id, name, slug, user_id];
     const result = await client.query(query, values);
     return result.rows[0];
   } catch (error) {
@@ -68,12 +68,12 @@ async function updateGameCategory(id, name, slug) {
   }
 }
 
-async function deleteGameCategory(id) {
+async function deleteGameCategory(id, user_id) {
   let client;
   try {
     client = await pool.connect();
-    const query = `SELECT * FROM delete_game_category($1) AS success`;
-    const values = [id];
+    const query = `SELECT * FROM delete_game_category($1, $2) AS success`;
+    const values = [id, user_id];
     const result = await client.query(query, values);
     return result.rows[0];
   } catch (error) {
@@ -85,12 +85,12 @@ async function deleteGameCategory(id) {
   }
 }
 
-async function updateGameCategoryStatus(id, status) {
+async function updateGameCategoryStatus(id, status, user_id) {
   let client;
   try {
     client = await pool.connect();
-    const query = `SELECT * FROM update_game_category_status($1, $2) AS success`;
-    const values = [id, status];
+    const query = `SELECT * FROM update_game_category_status($1, $2, $3) AS success`;
+    const values = [id, status, user_id];
     const result = await client.query(query, values);
     return result.rows[0];
   } catch (error) {

@@ -1,11 +1,11 @@
 const pool = require("../config/db");
 
-async function getDeviceTypes(page, limit, search, sort_by, sort_order) {
+async function getDeviceTypes(page, limit, search, sort_by, sort_order, user_id) {
   let client;
   try {
     client = await pool.connect();
-    const query = `SELECT * FROM get_device_types($1, $2, $3, $4, $5)`;
-    const values = [page, limit, search, sort_by, sort_order];
+    const query = `SELECT * FROM get_device_types($1, $2, $3, $4, $5, $6)`;
+    const values = [page, limit, search, sort_by, sort_order, user_id];
     const result = await client.query(query, values);
     return result.rows;
   } catch (error) {
@@ -17,12 +17,12 @@ async function getDeviceTypes(page, limit, search, sort_by, sort_order) {
   }
 }
 
-async function getDeviceTypeById(id) {
+async function getDeviceTypeById(id, user_id) {
   let client;
   try {
     client = await pool.connect();
-    const query = `SELECT * FROM get_device_type_by_id($1)`;
-    const values = [id];
+    const query = `SELECT * FROM get_device_type_by_id($1, $2)`;
+    const values = [id, user_id];
     const result = await client.query(query, values);
     return result.rows[0];
   } catch (error) {
@@ -34,12 +34,12 @@ async function getDeviceTypeById(id) {
   }
 }
 
-async function createDeviceType(name, slug) {
+async function createDeviceType(name, slug, user_id) {
   let client;
   try {
     client = await pool.connect();
-    const query = `SELECT * FROM create_device_type($1, $2)`;
-    const values = [name, slug];
+    const query = `SELECT * FROM create_device_type($1, $2, $3)`;
+    const values = [name, slug, user_id];
     const result = await client.query(query, values);
     return result.rows[0];
   } catch (error) {
@@ -51,12 +51,12 @@ async function createDeviceType(name, slug) {
   }
 }
 
-async function updateDeviceType(id, name, slug) {
+async function updateDeviceType(id, name, slug, user_id) {
   let client;
   try {
     client = await pool.connect();
-    const query = `SELECT * FROM update_device_type($1, $2, $3) AS success`;
-    const values = [id, name, slug];
+    const query = `SELECT * FROM update_device_type($1, $2, $3, $4) AS success`;
+    const values = [id, name, slug, user_id];
     const result = await client.query(query, values);
     return result.rows[0];
   } catch (error) {
@@ -68,12 +68,12 @@ async function updateDeviceType(id, name, slug) {
   }
 }
 
-async function deleteDeviceType(id) {
+async function deleteDeviceType(id, user_id) {
   let client;
   try {
     client = await pool.connect();
-    const query = `SELECT * FROM delete_device_type($1) AS success`;
-    const values = [id];
+    const query = `SELECT * FROM delete_device_type($1, $2) AS success`;
+    const values = [id, user_id];
     const result = await client.query(query, values);
     return result.rows[0];
   } catch (error) {
@@ -85,12 +85,12 @@ async function deleteDeviceType(id) {
   }
 }
 
-async function updateDeviceTypeStatus(id, status) {
+async function updateDeviceTypeStatus(id, status, user_id) {
   let client;
   try {
     client = await pool.connect();
-    const query = `SELECT * FROM update_device_type_status($1, $2) AS success`;
-    const values = [id, status];
+    const query = `SELECT * FROM update_device_type_status($1, $2, $3) AS success`;
+    const values = [id, status, user_id];
     const result = await client.query(query, values);
     return result.rows[0];
   } catch (error) {

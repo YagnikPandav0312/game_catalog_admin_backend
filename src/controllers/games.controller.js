@@ -2,8 +2,8 @@ const service = require("../service/games.service");
 
 async function getGames(req, res) {
   try {
-    const { page, limit, search, sort_by, sort_order } = req.body || {};
-    const result = await service.getGames(page, limit, search, sort_by, sort_order);
+    const { page, limit, search, sort_by, sort_order, user_id } = req.body || {};
+    const result = await service.getGames(page, limit, search, sort_by, sort_order, user_id);
     const totalRecords =
       result.length > 0 ? parseInt(result[0].total_records, 10) : 0;
     const data = result.map(({ total_records, ...rest }) => rest);
@@ -27,7 +27,9 @@ async function getGames(req, res) {
 
 async function getGameById(req, res) {
   try {
-    const result = await service.getGameById(req.params.id);
+    const { id } = req.params;
+    const { user_id } = req.body || {};
+    const result = await service.getGameById(id, user_id);
     if (!result) {
       return res.status(404).json({
         status: {
@@ -75,6 +77,7 @@ async function createGame(req, res) {
       max_bet: req.body.max_bet ? parseFloat(req.body.max_bet) : null,
       rtp: req.body.rtp ? parseFloat(req.body.rtp) : null,
       thumbnail: req.file ? req.file.path : req.body.thumbnail || null,
+      user_id: req.body.user_id ? parseInt(req.body.user_id, 10) : null,
     };
 
     const result = await service.createGame(payload);
@@ -97,7 +100,8 @@ async function createGame(req, res) {
 
 async function updateGame(req, res) {
   try {
-    const { id } = req.params;
+    const { id, game_id } = req.body || {};
+    const targetId = id || game_id;
     const payload = {
       ...req.body,
       provider_id: req.body.provider_id
@@ -116,9 +120,10 @@ async function updateGame(req, res) {
       max_bet: req.body.max_bet ? parseFloat(req.body.max_bet) : null,
       rtp: req.body.rtp ? parseFloat(req.body.rtp) : null,
       thumbnail: req.file ? req.file.path : req.body.thumbnail || null,
+      user_id: req.body.user_id ? parseInt(req.body.user_id, 10) : null,
     };
 
-    const result = await service.updateGame(id, payload);
+    const result = await service.updateGame(targetId, payload);
 
     if (!result) {
       return res.status(404).json({
@@ -148,9 +153,9 @@ async function updateGame(req, res) {
 
 async function deleteGame(req, res) {
   try {
-    const { id } = req.params;
-
-    const result = await service.deleteGame(id);
+    const { id, game_id, user_id } = req.body || {};
+    const targetId = id || game_id;
+    const result = await service.deleteGame(targetId, user_id);
 
     if (!result) {
       return res.status(404).json({
@@ -180,8 +185,8 @@ async function deleteGame(req, res) {
 
 async function updateGameStatus(req, res) {
   try {
-    const { id } = req.params;
-    const { status, is_active } = req.body || {};
+    const { id, game_id, status, is_active, user_id } = req.body || {};
+    const targetId = id || game_id;
     const newStatus = status !== undefined ? status : is_active;
     if (newStatus === undefined) {
       return res.status(400).json({
@@ -191,7 +196,7 @@ async function updateGameStatus(req, res) {
         },
       });
     }
-    const result = await service.updateGameStatus(id, newStatus);
+    const result = await service.updateGameStatus(targetId, newStatus, user_id);
     if (!result) {
       return res.status(400).json({
         status: {

@@ -4,9 +4,10 @@ const gamesService = require("../service/games.service");
 
 async function home(req, res) {
   try {
-    const games = await gamesService.getGames(1, 10, "");
-    const providers = await providerService.getProviders(1, 10, "");
-    const categories = await gameCategoryService.getGameCategories(1, 10, "");
+    const { user_id } = req.body || {};
+    const games = await gamesService.getGames(1, 10, "", null, null, user_id);
+    const providers = await providerService.getProviders(1, 10, "", null, null, user_id);
+    const categories = await gameCategoryService.getGameCategories(1, 10, "", null, null, user_id);
 
     return res.status(200).json({
       data: {
@@ -32,8 +33,8 @@ async function home(req, res) {
 
 async function game(req, res) {
   try {
-    const { page, limit, search } = req.body || {};
-    const result = await gamesService.getGames(page, limit, search);
+    const { page, limit, search, user_id } = req.body || {};
+    const result = await gamesService.getGames(page, limit, search, null, null, user_id);
     const totalRecords =
       result.length > 0 ? parseInt(result[0].total_records, 10) : 0;
     const data = result.map(({ total_records, ...rest }) => rest);
@@ -58,8 +59,8 @@ async function game(req, res) {
 
 async function gameDetail(req, res) {
   try {
-    const { id } = req.body || {};
-    const result = await gamesService.getGameById(id);
+    const { id, user_id } = req.body || {};
+    const result = await gamesService.getGameById(id, user_id);
     if (!result) {
       return res.status(404).json({
         status: {
@@ -88,8 +89,8 @@ async function gameDetail(req, res) {
 
 async function providers(req, res) {
   try {
-    const { page, limit, search } = req.body || {};
-    const result = await providerService.getProviders(page, limit, search);
+    const { page, limit, search, user_id } = req.body || {};
+    const result = await providerService.getProviders(page, limit, search, null, null, user_id);
     const totalRecords =
       result.length > 0 ? parseInt(result[0].total_records, 10) : 0;
     const data = result.map(({ total_records, ...rest }) => rest);
@@ -114,11 +115,14 @@ async function providers(req, res) {
 
 async function category(req, res) {
   try {
-    const { page, limit, search } = req.body || {};
+    const { page, limit, search, user_id } = req.body || {};
     const result = await gameCategoryService.getGameCategories(
       page,
       limit,
       search,
+      null,
+      null,
+      user_id,
     );
     const totalRecords =
       result.length > 0 ? parseInt(result[0].total_records, 10) : 0;

@@ -13,7 +13,7 @@ const {
 router.post("/get_device_type", verifyToken, getDeviceTypes);
 router.get("/get_device_type_by_id/:id", verifyToken, getDeviceTypeById);
 router.post("/create_device_type", verifyToken, createDeviceType);
-router.put("/update_device_type/:id", verifyToken, updateDeviceType);
-router.delete("/delete_device_type/:id", verifyToken, deleteDeviceType);
-router.put("/update_device_type_status/:id", verifyToken, updateDeviceTypeStatus);
+router.post("/update_device_type", verifyToken, updateDeviceType);
+router.post("/delete_device_type", verifyToken, deleteDeviceType);
+router.post("/update_device_type_status", verifyToken, updateDeviceTypeStatus);
 module.exports = router;

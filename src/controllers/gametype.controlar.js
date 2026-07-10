@@ -2,13 +2,14 @@ const service = require("../service/gametype.service");
 
 async function getGameType(req, res) {
   try {
-    const { page, limit, search, sort_by, sort_order } = req.body || {};
+    const { page, limit, search, sort_by, sort_order, user_id } = req.body || {};
     const result = await service.getGameType(
       page,
       limit,
       search,
       sort_by,
       sort_order,
+      user_id,
     );
     const totalRecords =
       result.length > 0 ? parseInt(result[0].total_records, 10) : 0;
@@ -34,7 +35,9 @@ async function getGameType(req, res) {
 
 async function getGameTypeById(req, res) {
   try {
-    const result = await service.getGameTypeById(req.params.id);
+    const { id } = req.params;
+    const { user_id } = req.body || {};
+    const result = await service.getGameTypeById(id, user_id);
     if (!result) {
       return res.status(404).json({
         status: {
@@ -63,8 +66,8 @@ async function getGameTypeById(req, res) {
 
 async function createGameType(req, res) {
   try {
-    const { game_types_name, slug } = req.body || {};
-    const result = await service.createGameType(game_types_name, slug);
+    const { game_types_name, slug, user_id } = req.body || {};
+    const result = await service.createGameType(game_types_name, slug, user_id);
     return res.status(201).json({
       status: {
         code: result.code,
@@ -84,11 +87,13 @@ async function createGameType(req, res) {
 
 async function updateGameType(req, res) {
   try {
-    const { game_types_name, slug } = req.body || {};
+    const { id, game_type_id, game_types_name, slug, user_id } = req.body || {};
+    const targetId = id || game_type_id;
     const result = await service.updateGameType(
-      req.params.id,
+      targetId,
       game_types_name,
       slug,
+      user_id,
     );
     if (!result) {
       return res.status(404).json({
@@ -117,7 +122,9 @@ async function updateGameType(req, res) {
 
 async function deleteGameType(req, res) {
   try {
-    const result = await service.deleteGameType(req.params.id);
+    const { id, game_type_id, user_id } = req.body || {};
+    const targetId = id || game_type_id;
+    const result = await service.deleteGameType(targetId, user_id);
     if (!result) {
       return res.status(404).json({
         status: {
@@ -145,8 +152,8 @@ async function deleteGameType(req, res) {
 
 async function updateGameTypeStatus(req, res) {
   try {
-    const { id } = req.params;
-    const { status, is_active } = req.body || {};
+    const { id, game_type_id, status, is_active, user_id } = req.body || {};
+    const targetId = id || game_type_id;
     const newStatus = status !== undefined ? status : is_active;
     if (newStatus === undefined) {
       return res.status(400).json({
@@ -156,7 +163,7 @@ async function updateGameTypeStatus(req, res) {
         },
       });
     }
-    const result = await service.updateGameTypeStatus(id, newStatus);
+    const result = await service.updateGameTypeStatus(targetId, newStatus, user_id);
     if (!result) {
       return res.status(400).json({
         status: {

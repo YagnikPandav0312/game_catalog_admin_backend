@@ -2,13 +2,14 @@ const service = require("../service/devicetype.service");
 
 async function getDeviceTypes(req, res) {
   try {
-    const { page, limit, search, sort_by, sort_order } = req.body || {};
+    const { page, limit, search, sort_by, sort_order, user_id } = req.body || {};
     const result = await service.getDeviceTypes(
       page,
       limit,
       search,
       sort_by,
       sort_order,
+      user_id,
     );
     const totalRecords =
       result.length > 0 ? parseInt(result[0].total_records, 10) : 0;
@@ -34,7 +35,9 @@ async function getDeviceTypes(req, res) {
 
 async function getDeviceTypeById(req, res) {
   try {
-    const result = await service.getDeviceTypeById(req.params.id);
+    const { id } = req.params;
+    const { user_id } = req.body || {};
+    const result = await service.getDeviceTypeById(id, user_id);
     if (!result) {
       return res.status(404).json({
         status: {
@@ -63,8 +66,8 @@ async function getDeviceTypeById(req, res) {
 
 async function createDeviceType(req, res) {
   try {
-    const { device_type_name, slug } = req.body;
-    const result = await service.createDeviceType(device_type_name, slug);
+    const { device_type_name, slug, user_id } = req.body || {};
+    const result = await service.createDeviceType(device_type_name, slug, user_id);
     return res.status(201).json({
       status: {
         code: result.code,
@@ -84,11 +87,13 @@ async function createDeviceType(req, res) {
 
 async function updateDeviceType(req, res) {
   try {
-    const { device_type_name, slug } = req.body;
+    const { id, device_type_id, device_type_name, slug, user_id } = req.body || {};
+    const targetId = id || device_type_id;
     const result = await service.updateDeviceType(
-      req.params.id,
+      targetId,
       device_type_name,
       slug,
+      user_id,
     );
     if (!result) {
       return res.status(404).json({
@@ -117,7 +122,9 @@ async function updateDeviceType(req, res) {
 
 async function deleteDeviceType(req, res) {
   try {
-    const result = await service.deleteDeviceType(req.params.id);
+    const { id, device_type_id, user_id } = req.body || {};
+    const targetId = id || device_type_id;
+    const result = await service.deleteDeviceType(targetId, user_id);
     if (!result) {
       return res.status(404).json({
         status: {
@@ -145,8 +152,8 @@ async function deleteDeviceType(req, res) {
 
 async function updateDeviceTypeStatus(req, res) {
   try {
-    const { id } = req.params;
-    const { status, is_active } = req.body || {};
+    const { id, device_type_id, status, is_active, user_id } = req.body || {};
+    const targetId = id || device_type_id;
     const newStatus = status !== undefined ? status : is_active;
     if (newStatus === undefined) {
       return res.status(400).json({
@@ -156,7 +163,7 @@ async function updateDeviceTypeStatus(req, res) {
         },
       });
     }
-    const result = await service.updateDeviceTypeStatus(id, newStatus);
+    const result = await service.updateDeviceTypeStatus(targetId, newStatus, user_id);
     if (!result) {
       return res.status(400).json({
         status: {

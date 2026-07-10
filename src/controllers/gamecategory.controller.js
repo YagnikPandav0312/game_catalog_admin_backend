@@ -2,8 +2,8 @@ const service = require("../service/gamecategory.service");
 
 async function getGameCategories(req, res) {
   try {
-    const { page, limit, search, sort_by, sort_order } = req.body || {};
-    const result = await service.getGameCategories(page, limit, search, sort_by, sort_order);
+    const { page, limit, search, sort_by, sort_order, user_id } = req.body || {};
+    const result = await service.getGameCategories(page, limit, search, sort_by, sort_order, user_id);
     const totalRecords = result.length > 0 ? parseInt(result[0].total_records, 10) : 0;
     const data = result.map(({ total_records, ...rest }) => rest);
     return res.status(200).json({
@@ -27,7 +27,9 @@ async function getGameCategories(req, res) {
 
 async function getGameCategoryById(req, res) {
   try {
-    const result = await service.getGameCategoryById(req.params.id);
+    const { id } = req.params;
+    const { user_id } = req.body || {};
+    const result = await service.getGameCategoryById(id, user_id);
     if (!result) {
       return res.status(404).json({
         status: {
@@ -56,8 +58,8 @@ async function getGameCategoryById(req, res) {
 
 async function createGameCategory(req, res) {
   try {
-    const { game_categorie_name, slug } = req.body || {};
-    const result = await service.createGameCategory(game_categorie_name, slug);
+    const { game_categorie_name, slug, user_id } = req.body || {};
+    const result = await service.createGameCategory(game_categorie_name, slug, user_id);
     return res.status(result.code === 0 ? 201 : 400).json({
       status: {
         code: result.code,
@@ -77,8 +79,9 @@ async function createGameCategory(req, res) {
 
 async function updateGameCategory(req, res) {
   try {
-    const { game_categorie_name, slug } = req.body || {};
-    const result = await service.updateGameCategory(req.params.id, game_categorie_name, slug);
+    const { id, game_categorie_id, game_categorie_name, slug, user_id } = req.body || {};
+    const targetId = id || game_categorie_id;
+    const result = await service.updateGameCategory(targetId, game_categorie_name, slug, user_id);
     if (!result) {
       return res.status(404).json({
         status: {
@@ -106,7 +109,9 @@ async function updateGameCategory(req, res) {
 
 async function deleteGameCategory(req, res) {
   try {
-    const result = await service.deleteGameCategory(req.params.id);
+    const { id, game_categorie_id, user_id } = req.body || {};
+    const targetId = id || game_categorie_id;
+    const result = await service.deleteGameCategory(targetId, user_id);
     console.log(result);
     if (!result) {
       return res.status(404).json({
@@ -135,8 +140,8 @@ async function deleteGameCategory(req, res) {
 
 async function updateGameCategoryStatus(req, res) {
   try {
-    const { id } = req.params;
-    const { status, is_active } = req.body || {};
+    const { id, game_categorie_id, status, is_active, user_id } = req.body || {};
+    const targetId = id || game_categorie_id;
     const newStatus = status !== undefined ? status : is_active;
     if (newStatus === undefined) {
       return res.status(400).json({
@@ -146,7 +151,7 @@ async function updateGameCategoryStatus(req, res) {
         }
       });
     }
-    const result = await service.updateGameCategoryStatus(id, newStatus);
+    const result = await service.updateGameCategoryStatus(targetId, newStatus, user_id);
     if (!result) {
       return res.status(400).json({
         status: {

@@ -2,7 +2,7 @@ const dashboardService = require("../service/dashboard.service");
 
 async function getDashboardStatistics(req, res) {
   try {
-    const { user_id } = req.body.user_id;
+    const { user_id } = req.body;
     const result = await dashboardService.getDashboardStatistics(user_id);
     const statistics = {
       total_games: result ? parseInt(result.total_games, 10) : 0,
