@@ -71,7 +71,30 @@ async function register(req, res) {
   }
 }
 
+async function logout(req, res) {
+  try {
+    const user_id = req.user.user_id;
+    const result = await authService.logout(user_id);
+    return res.status(result.code === 0 ? 200 : 404).json({
+      status: {
+        code: result.code,
+        message: result.message
+      }
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      status: {
+        code: 1,
+        message: error.message
+      }
+    });
+  }
+}
+
+
 module.exports = {
   login,
   register,
+  logout
 };
