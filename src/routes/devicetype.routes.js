@@ -8,6 +8,7 @@ const {
   updateDeviceType,
   deleteDeviceType,
   updateDeviceTypeStatus,
+  getDeviceTypeDdl,
 } = require("../controllers/devicetype.controller");
 
 router.post("/get_device_type", verifyToken, getDeviceTypes);
@@ -16,4 +17,5 @@ router.post("/create_device_type", verifyToken, createDeviceType);
 router.post("/update_device_type", verifyToken, updateDeviceType);
 router.post("/delete_device_type", verifyToken, deleteDeviceType);
 router.post("/update_device_type_status", verifyToken, updateDeviceTypeStatus);
+router.post("/get_device_type_ddl", verifyToken, getDeviceTypeDdl);
 module.exports = router;

@@ -189,6 +189,28 @@ async function updateDeviceTypeStatus(req, res) {
   }
 }
 
+async function getDeviceTypeDdl(req, res) {
+  try {
+    const { user_id } = req.body || {};
+    const result = await service.getDeviceTypeDdl(user_id);
+    return res.status(200).json({
+      data: result,
+      status: {
+        code: 0,
+        message: "Device Type DDL Fetched Successfully",
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: {
+        code: 2,
+        error: error.message,
+        message: "something went wrong"
+      }
+    });
+  }
+}
+
 module.exports = {
   getDeviceTypes,
   getDeviceTypeById,
@@ -196,4 +218,5 @@ module.exports = {
   updateDeviceType,
   deleteDeviceType,
   updateDeviceTypeStatus,
+  getDeviceTypeDdl,
 };

@@ -10,6 +10,7 @@ const {
   updateGameCategory,
   deleteGameCategory,
   updateGameCategoryStatus,
+  getGameCategoryDdl
 } = require("../controllers/gamecategory.controller");
 
 router.post("/get_game_category", verifyToken, logger, getGameCategories);
@@ -18,5 +19,6 @@ router.post("/create_game_category", verifyToken, logger, createGameCategory);
 router.post("/update_game_category", verifyToken, logger, updateGameCategory);
 router.post("/delete_game_category", verifyToken, logger, deleteGameCategory);
 router.post("/update_game_category_status", verifyToken, logger, updateGameCategoryStatus);
+router.post("/get_game_category_ddl", verifyToken, logger, getGameCategoryDdl);
 
 module.exports = router;

@@ -36,9 +36,9 @@ async function getProviders(req, res) {
 
 async function getProvidersById(req, res) {
   try {
-    const {id} = req.params;
-    const {user_id} = req.body;
-    const result = await providerService.getProvidersById(id,user_id);
+    const { id } = req.params;
+    const { user_id } = req.body;
+    const result = await providerService.getProvidersById(id, user_id);
     if (!result) {
       return res.status(404).json({
         status: {
@@ -194,7 +194,7 @@ async function deleteProviders(req, res) {
 
 async function updateProviderStatus(req, res) {
   try {
-    const { status,provider_id, user_id, is_active } = req.body || {};
+    const { status, provider_id, user_id, is_active } = req.body || {};
     const newStatus = status !== undefined ? status : is_active;
     if (newStatus === undefined) {
       return res.status(400).json({
@@ -230,6 +230,29 @@ async function updateProviderStatus(req, res) {
   }
 }
 
+async function getProviderDdl(req, res) {
+  try {
+    const { user_id } = req.body;
+
+    const providers = await providerService.getProviderDdl(user_id);
+
+    return res.status(200).json({
+      status: {
+        code: 0,
+        message: "Providers fetched successfully"
+      },
+      data: providers
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: {
+        code: 1,
+        message: error.message
+      }
+    });
+  }
+}
+
 module.exports = {
   getProviders,
   getProvidersById,
@@ -237,4 +260,5 @@ module.exports = {
   updateProviders,
   deleteProviders,
   updateProviderStatus,
+  getProviderDdl
 };

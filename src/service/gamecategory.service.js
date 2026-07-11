@@ -41,6 +41,10 @@ async function updateGameCategoryStatus(id, status, user_id) {
   return await gameCategoryRepo.updateGameCategoryStatus(id, status, user_id);
 }
 
+async function getGameCategoryDdl(user_id) {
+  return await gameCategoryRepo.getGameCategoryDdl(user_id);
+}
+
 module.exports = {
   getGameCategories,
   getGameCategoryById,
@@ -48,4 +52,5 @@ module.exports = {
   updateGameCategory,
   deleteGameCategory,
   updateGameCategoryStatus,
+  getGameCategoryDdl
 };

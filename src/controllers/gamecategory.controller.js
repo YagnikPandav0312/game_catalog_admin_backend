@@ -177,6 +177,28 @@ async function updateGameCategoryStatus(req, res) {
   }
 }
 
+async function getGameCategoryDdl(req, res) {
+  try {
+    const { user_id } = req.body || {};
+    const result = await service.getGameCategoryDdl(user_id);
+    return res.status(200).json({
+      data: result,
+      status: {
+        code: 0,
+        message: "Game Category DDL Fetched Successfully",
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: {
+        code: 2,
+        error: error.message,
+        message: "something went wrong"
+      }
+    });
+  }
+}
+
 module.exports = {
   getGameCategories,
   getGameCategoryById,
@@ -184,4 +206,5 @@ module.exports = {
   updateGameCategory,
   deleteGameCategory,
   updateGameCategoryStatus,
+  getGameCategoryDdl
 };

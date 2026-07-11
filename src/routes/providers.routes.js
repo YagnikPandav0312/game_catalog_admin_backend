@@ -11,6 +11,7 @@ const {
   updateProviders,
   deleteProviders,
   updateProviderStatus,
+  getProviderDdl
 } = require("../controllers/providers.controller");
 
 router.post("/get_providers", verifyToken, logger, getProviders);
@@ -19,5 +20,6 @@ router.post( "/create_providers", verifyToken, upload.single("logo"), logger, cr
 router.post("/update_providers",verifyToken,upload.single("logo"), logger, updateProviders);
 router.post("/delete_provider", verifyToken, logger, deleteProviders);
 router.post("/update_provider_status", verifyToken, logger, updateProviderStatus);
+router.post("/get_provider_ddl", verifyToken, logger, getProviderDdl);
 
 module.exports = router;

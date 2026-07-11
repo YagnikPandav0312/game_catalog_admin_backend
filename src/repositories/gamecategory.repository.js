@@ -102,6 +102,23 @@ async function updateGameCategoryStatus(id, status, user_id) {
   }
 }
 
+async function getGameCategoryDdl(user_id) {
+  let client;
+  try {
+    client = await pool.connect();
+    const query = `SELECT * FROM get_game_category_ddl($1)`;
+    const values = [user_id];
+    const result = await client.query(query, values);
+    return result.rows;
+  } catch (error) {
+    console.error("Error fetching game category DDL:", error);
+  } finally {
+    if (client) {
+      client.release();
+    }
+  }
+}
+
 module.exports = {
   getGameCategories,
   getGameCategoryById,
@@ -109,4 +126,5 @@ module.exports = {
   updateGameCategory,
   deleteGameCategory,
   updateGameCategoryStatus,
+  getGameCategoryDdl
 };

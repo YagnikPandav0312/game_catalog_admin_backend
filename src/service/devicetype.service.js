@@ -41,6 +41,10 @@ async function updateDeviceTypeStatus(id, status, user_id) {
   return await DeviceTypeRepo.updateDeviceTypeStatus(id, status, user_id);
 }
 
+async function getDeviceTypeDdl(user_id) {
+  return await DeviceTypeRepo.getDeviceTypeDdl(user_id);
+}
+
 module.exports = {
   getDeviceTypes,
   getDeviceTypeById,
@@ -48,4 +52,5 @@ module.exports = {
   updateDeviceType,
   deleteDeviceType,
   updateDeviceTypeStatus,
+  getDeviceTypeDdl,
 };

@@ -44,6 +44,10 @@ async function updateGameTypeStatus(id, status, user_id) {
   return await gameTypeRepo.updateGameTypeStatus(id, status, user_id);
 }
 
+async function getGameTypeDdl(user_id) {
+  return await gameTypeRepo.getGameTypeDdl(user_id);
+}
+
 module.exports = {
   createGameType,
   getGameType,
@@ -51,4 +55,5 @@ module.exports = {
   updateGameType,
   deleteGameType,
   updateGameTypeStatus,
+  getGameTypeDdl,
 };

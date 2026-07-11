@@ -189,6 +189,28 @@ async function updateGameTypeStatus(req, res) {
   }
 }
 
+async function getGameTypeDdl(req, res) {
+  try {
+    const { user_id } = req.body || {};
+    const result = await service.getGameTypeDdl(user_id);
+    return res.status(200).json({
+      data: result,
+      status: {
+        code: 0,
+        message: "GameType DDL Fetched Successfully",
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: {
+        code: 2,
+        error: error.message,
+        message: "something went wrong",
+      },
+    });
+  }
+}
+
 module.exports = {
   createGameType,
   getGameType,
@@ -196,4 +218,5 @@ module.exports = {
   updateGameType,
   deleteGameType,
   updateGameTypeStatus,
+  getGameTypeDdl,
 };

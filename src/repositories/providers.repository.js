@@ -5,7 +5,7 @@ async function getProviders(page, limit, search, sort_by, sort_order, user_id) {
   try {
     client = await pool.connect();
     const query = `SELECT * FROM get_providers($1, $2, $3, $4, $5,$6)`;
-    const values = [page, limit, search, sort_by, sort_order,user_id];
+    const values = [page, limit, search, sort_by, sort_order, user_id];
     const result = await client.query(query, values);
     return result.rows;
   } catch (error) {
@@ -115,6 +115,24 @@ async function updateProviderStatus(provider_id, status, user_id) {
   }
 }
 
+async function getProviderDdl(user_id) {
+  let client;
+  try {
+    client = await pool.connect();
+    const query = `SELECT * FROM get_provider_ddl($1)`;
+    const values = [user_id];
+    const result = await client.query(query, values);
+    return result.rows;
+  } catch (error) {
+    console.error("Error fetching provider DDL:", error);
+    throw error;
+  } finally {
+    if (client) {
+      client.release();
+    }
+  }
+}
+
 module.exports = {
   getProviders,
   getProviderById,
@@ -122,4 +140,5 @@ module.exports = {
   updateProvider,
   deleteProviders,
   updateProviderStatus,
+  getProviderDdl
 };
