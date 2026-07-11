@@ -1,5 +1,14 @@
 const service = require("../service/games.service");
 
+const parseIds = (val) => {
+  if (!val) return null;
+  const arr = Array.isArray(val) ? val : String(val).split(",");
+  const parsed = arr.map(id => parseInt(id, 10)).filter(id => !isNaN(id));
+  return parsed.length ? parsed : null;
+};
+
+
+
 async function getGames(req, res) {
   try {
     const { page, limit, search, sort_by, sort_order, user_id } = req.body || {};
@@ -64,15 +73,9 @@ async function createGame(req, res) {
       provider_id: req.body.provider_id
         ? parseInt(req.body.provider_id, 10)
         : null,
-      category_id: req.body.category_id
-        ? parseInt(req.body.category_id, 10)
-        : null,
-      game_type_id: req.body.game_type_id
-        ? parseInt(req.body.game_type_id, 10)
-        : null,
-      device_type_id: req.body.device_type_id
-        ? parseInt(req.body.device_type_id, 10)
-        : null,
+      category_id: parseIds(req.body.category_id),
+      game_type_id: parseIds(req.body.game_type_id),
+      device_type_id: parseIds(req.body.device_type_id),
       min_bet: req.body.min_bet ? parseFloat(req.body.min_bet) : null,
       max_bet: req.body.max_bet ? parseFloat(req.body.max_bet) : null,
       rtp: req.body.rtp ? parseFloat(req.body.rtp) : null,
@@ -107,15 +110,9 @@ async function updateGame(req, res) {
       provider_id: req.body.provider_id
         ? parseInt(req.body.provider_id, 10)
         : null,
-      category_id: req.body.category_id
-        ? parseInt(req.body.category_id, 10)
-        : null,
-      game_type_id: req.body.game_type_id
-        ? parseInt(req.body.game_type_id, 10)
-        : null,
-      device_type_id: req.body.device_type_id
-        ? parseInt(req.body.device_type_id, 10)
-        : null,
+      category_id: parseIds(req.body.category_id),
+      game_type_id: parseIds(req.body.game_type_id),
+      device_type_id: parseIds(req.body.device_type_id),
       min_bet: req.body.min_bet ? parseFloat(req.body.min_bet) : null,
       max_bet: req.body.max_bet ? parseFloat(req.body.max_bet) : null,
       rtp: req.body.rtp ? parseFloat(req.body.rtp) : null,
