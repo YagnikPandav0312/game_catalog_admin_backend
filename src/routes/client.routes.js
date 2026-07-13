@@ -5,16 +5,16 @@ const verifyToken = require("../middlewares/auth.middleware");
 
 const {
   home,
-  game,
+  games,
   gameDetail,
   providers,
-  category,
+  categories,
 } = require("../controllers/client.controller");
 
-router.post("/home", verifyToken, logger, home);
-router.post("/game", verifyToken, logger, game);
-router.post("/game-detail", verifyToken, logger, gameDetail);
+router.get("/home", logger, home);
 router.post("/providers", verifyToken, logger, providers);
-router.post("/category", verifyToken, logger, category);
+router.post("/categories", verifyToken, logger, categories);
+router.post("/games", verifyToken, logger, games);
+router.post("/games-detail", verifyToken, logger, gameDetail);
 
 module.exports = router;

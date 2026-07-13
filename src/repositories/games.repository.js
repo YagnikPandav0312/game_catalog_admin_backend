@@ -1,12 +1,12 @@
 const pool = require("../config/db");
 
-async function getGames(page, limit, search, sort_by, sort_order, user_id) {
+async function getGames(page, limit, search, sort_by, sort_order) {
   let client;
   try {
     client = await pool.connect();
     const result = await client.query(
-      `SELECT * FROM get_games($1, $2, $3, $4, $5, $6)`,
-      [page, limit, search, sort_by, sort_order, user_id],
+      `SELECT * FROM get_games($1, $2, $3, $4, $5)`,
+      [page, limit, search, sort_by, sort_order],
     );
     return result.rows;
   } catch (error) {
@@ -18,11 +18,11 @@ async function getGames(page, limit, search, sort_by, sort_order, user_id) {
   }
 }
 
-async function getGameById(id, user_id) {
+async function getGameById(id) {
   let client;
   try {
     client = await pool.connect();
-    const result = await client.query(`SELECT * FROM get_game_by_id($1, $2)`, [id, user_id]);
+    const result = await client.query(`SELECT * FROM get_game_by_id($1)`, [id]);
     return result.rows[0];
   } catch (error) {
     console.error("Error fetching game by ID:", error);
@@ -42,7 +42,7 @@ async function createGame(game) {
 $1,$2,$3,
 $4,$5,$6,
 $7,$8,$9,
-$10,$11,$12,$13,$14
+$10,$11,$12,$13
 )`,
       [
         game.provider_id,
@@ -58,7 +58,6 @@ $10,$11,$12,$13,$14
         game.max_bet,
         game.rtp,
         game.variance,
-        game.user_id,
       ],
     );
     return result.rows[0];
@@ -81,7 +80,7 @@ $1,$2,$3,
 $4,$5,$6,
 $7,$8,$9,
 $10,$11,$12,
-$13,$14,$15
+$13,$14
 ) AS success`,
       [
         id,
@@ -98,7 +97,6 @@ $13,$14,$15
         game.max_bet,
         game.rtp,
         game.variance,
-        game.user_id,
       ],
     );
     return result.rows[0];
@@ -111,13 +109,13 @@ $13,$14,$15
   }
 }
 
-async function deleteGame(id, user_id) {
+async function deleteGame(id) {
   let client;
   try {
     client = await pool.connect();
     const result = await client.query(
-      `SELECT * FROM delete_game($1, $2) AS success`,
-      [id, user_id],
+      `SELECT * FROM delete_game($1) AS success`,
+      [id],
     );
     return result.rows[0];
   } catch (error) {
@@ -129,13 +127,13 @@ async function deleteGame(id, user_id) {
   }
 }
 
-async function updateGameStatus(id, status, user_id) {
+async function updateGameStatus(id, status) {
   let client;
   try {
     client = await pool.connect();
     const result = await client.query(
-      `SELECT * FROM update_game_status($1, $2, $3) AS success`,
-      [id, status, user_id],
+      `SELECT * FROM update_game_status($1, $2) AS success`,
+      [id, status],
     );
     return result.rows[0];
   } catch (error) {

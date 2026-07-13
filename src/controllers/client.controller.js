@@ -1,23 +1,21 @@
 const gameCategoryService = require("../service/gamecategory.service");
 const providerService = require("../service/providerService");
-const gamesService = require("../service/games.service");
+const clientService = require("../service/client.service");
 
 async function home(req, res) {
   try {
-    const { user_id } = req.body || {};
-    const games = await gamesService.getGames(1, 10, "", null, null, user_id);
-    const providers = await providerService.getProviders(1, 10, "", null, null, user_id);
-    const categories = await gameCategoryService.getGameCategories(1, 10, "", null, null, user_id);
-
+    const games = await clientService.getGames();
+    const providers = await clientService.getProviders();
+    const categories = await clientService.getCategories();
     return res.status(200).json({
       data: {
-        games: games.map(({ total_records, ...rest }) => rest),
-        providers: providers.map(({ total_records, ...rest }) => rest),
-        categories: categories.map(({ total_records, ...rest }) => rest),
+        games: games,
+        providers: providers,
+        categories: categories
       },
       status: {
         code: 0,
-        message: "Home data fetched successfully",
+        message: "Home Fetched Successfully",
       },
     });
   } catch (error) {
@@ -31,7 +29,66 @@ async function home(req, res) {
   }
 }
 
-async function game(req, res) {
+async function providers(req, res) {
+  try {
+    const { page, limit, search, user_id } = req.body || {};
+    const result = await providerService.getProviders(page, limit, search, null, null, user_id);
+    const totalRecords =
+      result.length > 0 ? parseInt(result[0].total_records, 10) : 0;
+    const data = result.map(({ total_records, ...rest }) => rest);
+    return res.status(200).json({
+      data: data,
+      total_records: totalRecords,
+      status: {
+        code: 0,
+        message: "Providers fetched successfully",
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: {
+        code: 2,
+        error: error.message,
+        message: "something went wrong",
+      },
+    });
+  }
+}
+
+async function categories(req, res) {
+  try {
+    const { page, limit, search, user_id } = req.body || {};
+    const result = await gameCategoryService.getGameCategories(
+      page,
+      limit,
+      search,
+      null,
+      null,
+      user_id,
+    );
+    const totalRecords =
+      result.length > 0 ? parseInt(result[0].total_records, 10) : 0;
+    const data = result.map(({ total_records, ...rest }) => rest);
+    return res.status(200).json({
+      data: data,
+      total_records: totalRecords,
+      status: {
+        code: 0,
+        message: "Categories fetched successfully",
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: {
+        code: 2,
+        error: error.message,
+        message: "something went wrong",
+      },
+    });
+  }
+}
+
+async function games(req, res) {
   try {
     const { page, limit, search, user_id } = req.body || {};
     const result = await gamesService.getGames(page, limit, search, null, null, user_id);
@@ -87,69 +144,10 @@ async function gameDetail(req, res) {
   }
 }
 
-async function providers(req, res) {
-  try {
-    const { page, limit, search, user_id } = req.body || {};
-    const result = await providerService.getProviders(page, limit, search, null, null, user_id);
-    const totalRecords =
-      result.length > 0 ? parseInt(result[0].total_records, 10) : 0;
-    const data = result.map(({ total_records, ...rest }) => rest);
-    return res.status(200).json({
-      data: data,
-      total_records: totalRecords,
-      status: {
-        code: 0,
-        message: "Providers fetched successfully",
-      },
-    });
-  } catch (error) {
-    return res.status(500).json({
-      status: {
-        code: 2,
-        error: error.message,
-        message: "something went wrong",
-      },
-    });
-  }
-}
-
-async function category(req, res) {
-  try {
-    const { page, limit, search, user_id } = req.body || {};
-    const result = await gameCategoryService.getGameCategories(
-      page,
-      limit,
-      search,
-      null,
-      null,
-      user_id,
-    );
-    const totalRecords =
-      result.length > 0 ? parseInt(result[0].total_records, 10) : 0;
-    const data = result.map(({ total_records, ...rest }) => rest);
-    return res.status(200).json({
-      data: data,
-      total_records: totalRecords,
-      status: {
-        code: 0,
-        message: "Categories fetched successfully",
-      },
-    });
-  } catch (error) {
-    return res.status(500).json({
-      status: {
-        code: 2,
-        error: error.message,
-        message: "something went wrong",
-      },
-    });
-  }
-}
-
 module.exports = {
   home,
-  game,
+  games,
   gameDetail,
   providers,
-  category,
+  categories,
 };
