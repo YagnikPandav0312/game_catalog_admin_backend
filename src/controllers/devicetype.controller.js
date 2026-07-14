@@ -68,6 +68,14 @@ async function createDeviceType(req, res) {
   try {
     const { device_type_name, slug, user_id } = req.body || {};
     const result = await service.createDeviceType(device_type_name, slug, user_id);
+    if (!result) {
+      return res.status(404).json({
+        status: {
+          code: 1,
+          message: "Device Type Not Found",
+        },
+      });
+    }
     return res.status(201).json({
       status: {
         code: result.code,

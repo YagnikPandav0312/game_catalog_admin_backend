@@ -30,6 +30,7 @@ async function login(req, res) {
       },
     });
   } catch (error) {
+    console.error("Error in login auth controller:", error);
     return res.status(500).json({
       status: {
         code: 2,
@@ -54,6 +55,14 @@ async function register(req, res) {
       });
     }
     const result = await authService.register(full_name, email, password, role);
+    if (!result) {
+      return res.status(200).json({
+        status: {
+          code: 1,
+          message: "Registration Failed",
+        },
+      });
+    }
     return res.status(result.code === 0 ? 201 : 400).json({
       status: {
         code: result.code,
@@ -61,6 +70,7 @@ async function register(req, res) {
       },
     });
   } catch (error) {
+    console.error("Error in register auth controller:", error);
     return res.status(500).json({
       status: {
         code: 2,
@@ -75,6 +85,14 @@ async function logout(req, res) {
   try {
     const user_id = req.user.user_id;
     const result = await authService.logout(user_id);
+    if (!result) {
+      return res.status(200).json({
+        status: {
+          code: 1,
+          message: "Logout Failed"
+        }
+      });
+    }
     return res.status(result.code === 0 ? 200 : 404).json({
       status: {
         code: result.code,
@@ -85,8 +103,9 @@ async function logout(req, res) {
   } catch (error) {
     return res.status(500).json({
       status: {
-        code: 1,
-        message: error.message
+        code: 2,
+        error: error.message,
+        message: "something went wrong"
       }
     });
   }
