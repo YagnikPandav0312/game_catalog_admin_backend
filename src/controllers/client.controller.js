@@ -23,7 +23,7 @@ async function home(req, res) {
       status: {
         code: 2,
         error: error.message,
-        message: "something went wrong",
+        message: "Something Went Wrong",
       },
     });
   }
@@ -41,7 +41,7 @@ async function providers(req, res) {
       total_records: totalRecords,
       status: {
         code: 0,
-        message: "Providers fetched successfully",
+        message: "Providers Fetched Successfully",
       },
     });
   } catch (error) {
@@ -49,7 +49,7 @@ async function providers(req, res) {
       status: {
         code: 2,
         error: error.message,
-        message: "something went wrong",
+        message: "Something Went Wrong",
       },
     });
   }
@@ -74,7 +74,7 @@ async function categories(req, res) {
       total_records: totalRecords,
       status: {
         code: 0,
-        message: "Categories fetched successfully",
+        message: "Categories Fetched Successfully",
       },
     });
   } catch (error) {
@@ -82,7 +82,7 @@ async function categories(req, res) {
       status: {
         code: 2,
         error: error.message,
-        message: "something went wrong",
+        message: "Something Went Wrong",
       },
     });
   }
@@ -100,7 +100,7 @@ async function games(req, res) {
       total_records: totalRecords,
       status: {
         code: 0,
-        message: "Games fetched successfully",
+        message: "Games Fetched Successfully",
       },
     });
   } catch (error) {
@@ -108,7 +108,7 @@ async function games(req, res) {
       status: {
         code: 2,
         error: error.message,
-        message: "something went wrong",
+        message: "Something Went Wrong",
       },
     });
   }
@@ -122,7 +122,7 @@ async function gameDetail(req, res) {
       return res.status(404).json({
         status: {
           code: 1,
-          message: "Game not found",
+          message: "Game Not Found",
         },
       });
     }
@@ -130,7 +130,7 @@ async function gameDetail(req, res) {
       data: result,
       status: {
         code: 0,
-        message: "Game details fetched successfully",
+        message: "Game Details Fetched Successfully",
       },
     });
   } catch (error) {
@@ -138,7 +138,7 @@ async function gameDetail(req, res) {
       status: {
         code: 2,
         error: error.message,
-        message: "something went wrong",
+        message: "Something Went Wrong",
       },
     });
   }
