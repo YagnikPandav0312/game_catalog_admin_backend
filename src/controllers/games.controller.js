@@ -82,7 +82,15 @@ async function createGame(req, res) {
     };
 
     const result = await service.createGame(payload);
-    return res.status(201).json({
+    if (!result) {
+      return res.status(400).json({
+        status: {
+          code: 1,
+          message: "Create Game Failed",
+        },
+      });
+    }
+    return res.status(result.code === 0 ? 201 : 400).json({
       status: {
         code: result.code,
         message: result.message,
@@ -128,7 +136,7 @@ async function updateGame(req, res) {
       });
     }
 
-    return res.status(200).json({
+    return res.status(result.code === 0 ? 200 : 400).json({
       status: {
         code: result.code,
         message: result.message,
@@ -160,7 +168,7 @@ async function deleteGame(req, res) {
       });
     }
 
-    return res.status(200).json({
+    return res.status(result.code === 0 ? 200 : 400).json({
       status: {
         code: result.code,
         message: result.message,

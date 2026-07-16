@@ -14,27 +14,15 @@ async function getGameById(id) {
 }
 
 async function createGame(game) {
-    const result = await GamesRepo.createGame(game);
-    if (result.code !== 0) {
-        return null;
-    }
-    return result;
+    return await GamesRepo.createGame(game);
 }
 
 async function updateGame(id, game) {
-    const result = await GamesRepo.updateGame(id, game);
-    if (result.code !== 0) {
-        return null;
-    }
-    return result;
+    return await GamesRepo.updateGame(id, game);
 }
 
 async function deleteGame(id) {
-    const result = await GamesRepo.deleteGame(id);
-    if (result.code !== 0) {
-        return null;
-    }
-    return result;
+    return await GamesRepo.deleteGame(id);
 }
 
 async function updateGameStatus(id, status) {
