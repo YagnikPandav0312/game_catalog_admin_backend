@@ -42,7 +42,7 @@ async function createGame(game) {
 $1,$2,$3,
 $4,$5,$6,
 $7,$8,$9,
-$10,$11,$12,$13
+$10,$11,$12,$13,$14
 )`,
       [
         game.provider_id,
@@ -58,6 +58,7 @@ $10,$11,$12,$13
         game.max_bet,
         game.rtp,
         game.variance,
+        game.public_id,
       ],
     );
     return result.rows[0];
@@ -80,7 +81,7 @@ $1,$2,$3,
 $4,$5,$6,
 $7,$8,$9,
 $10,$11,$12,
-$13,$14
+$13,$14,$15
 ) AS success`,
       [
         id,
@@ -97,6 +98,7 @@ $13,$14
         game.max_bet,
         game.rtp,
         game.variance,
+        game.public_id,
       ],
     );
     return result.rows[0];
@@ -109,13 +111,13 @@ $13,$14
   }
 }
 
-async function deleteGame(id) {
+async function deleteGame(id, user_id) {
   let client;
   try {
     client = await pool.connect();
     const result = await client.query(
-      `SELECT * FROM delete_game($1) AS success`,
-      [id],
+      `SELECT * FROM delete_game($1,$2) AS success`,
+      [id, user_id],
     );
     return result.rows[0];
   } catch (error) {

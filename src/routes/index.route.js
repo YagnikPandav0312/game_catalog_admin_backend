@@ -8,8 +8,9 @@ const devicetypeRoutes = require("./devicetype.routes");
 const gamesRoutes = require("./games.routes");
 const gamecategoryRoutes = require("./gamecategory.routes");
 const dashboardRoutes = require("./dashboard.routes");
-const clientRoutes = require("./client.routes");
+// const clientRoutes = require("./client.routes");
 const playerRoutes = require("./player.routes");
+const sportRoutes = require("./sport.routes");
 
 app.use("/auth", authRoutes);
 app.use("/providers", providersRoutes);
@@ -19,6 +20,7 @@ app.use("/games", gamesRoutes);
 app.use("/gamecategory", gamecategoryRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/player", playerRoutes);
+app.use("/sport", sportRoutes);
 // app.use("/client", clientRoutes);
 
 module.exports = app;

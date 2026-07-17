@@ -79,6 +79,7 @@ async function createGame(req, res) {
       max_bet: req.body.max_bet ? parseFloat(req.body.max_bet) : null,
       rtp: req.body.rtp ? parseFloat(req.body.rtp) : null,
       thumbnail: req.file ? req.file.path : req.body.thumbnail || null,
+      public_id: req.file ? req.file.filename : null
     };
 
     const result = await service.createGame(payload);
@@ -111,6 +112,24 @@ async function updateGame(req, res) {
   try {
     const { id, game_id } = req.body || {};
     const targetId = id || game_id;
+    const games = await service.getGameById(targetId);
+    if (!games) {
+      return res.status(404).json({
+        status: {
+          code: 1,
+          message: "Game not found",
+        },
+      });
+    }
+    let thumbnail = games.thumbnail;
+    let public_id = games.public_id;
+    if (req.file) {
+      if (games.public_id) {
+        await cloudinary.uploader.destroy(games.public_id);
+      }
+      thumbnail = req.file.path;
+      public_id = req.file.filename;
+    }
     const payload = {
       ...req.body,
       provider_id: req.body.provider_id
@@ -122,11 +141,10 @@ async function updateGame(req, res) {
       min_bet: req.body.min_bet ? parseFloat(req.body.min_bet) : null,
       max_bet: req.body.max_bet ? parseFloat(req.body.max_bet) : null,
       rtp: req.body.rtp ? parseFloat(req.body.rtp) : null,
-      thumbnail: req.file ? req.file.path : req.body.thumbnail || null,
+      thumbnail: thumbnail,
+      public_id: public_id,
     };
-
     const result = await service.updateGame(targetId, payload);
-
     if (!result) {
       return res.status(404).json({
         status: {
@@ -155,10 +173,18 @@ async function updateGame(req, res) {
 
 async function deleteGame(req, res) {
   try {
-    const { id, game_id } = req.body || {};
-    const targetId = id || game_id;
-    const result = await service.deleteGame(targetId);
+    const { games_id, user_id } = req.body;
+    const games = await service.getGameById(games_id, user_id);
+    if (!games) {
+      return res.status(404).json({
+        status: {
+          code: 1,
+          message: "Games not found",
+        },
+      });
+    }
 
+    const result = await service.deleteGame(games_id, user_id);
     if (!result) {
       return res.status(404).json({
         status: {
@@ -166,6 +192,10 @@ async function deleteGame(req, res) {
           message: "Delete Game Failed",
         },
       });
+    }
+
+    if (games.public_id) {
+      await cloudinary.uploader.destroy(games.public_id);
     }
 
     return res.status(result.code === 0 ? 200 : 400).json({

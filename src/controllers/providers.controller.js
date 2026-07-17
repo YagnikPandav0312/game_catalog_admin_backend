@@ -96,7 +96,7 @@ async function createProviders(req, res) {
 
 async function updateProviders(req, res) {
   try {
-    const { provider_id, provider_name, slug, user_id } = req.body || {};
+    const { provider_id, user_id } = req.body || {};
     const provider = await providerService.getProvidersById(provider_id, user_id);
     if (!provider) {
       return res.status(404).json({

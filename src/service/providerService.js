@@ -13,7 +13,7 @@ async function getProvidersById(provider_id, user_id) {
   return await providerRepo.getProviderById(provider_id, user_id);
 }
 
-async function createProviders(provider_name, slug, logo, public_id, user_id) {
+async function createProviders(provider_name, slug, logo, user_id, public_id) {
   if (!provider_name || provider_name.trim() === "") {
     throw new Error("Provider name is required");
   }
@@ -21,8 +21,8 @@ async function createProviders(provider_name, slug, logo, public_id, user_id) {
     provider_name,
     slug,
     logo,
-    public_id,
-    user_id
+    user_id,
+    public_id
   );
   if (result.code !== 0) {
     return null;

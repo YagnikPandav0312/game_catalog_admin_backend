@@ -36,12 +36,12 @@ async function getProviderById(provider_id, user_id) {
   }
 }
 
-async function createProviders(provider_name, slug, logo, public_id, user_id) {
+async function createProviders(provider_name, slug, logo, user_id, public_id,) {
   let client;
   try {
     client = await pool.connect();
     const query = `SELECT * FROM create_providers($1, $2, $3, $4, $5)`;
-    const values = [provider_name, slug, logo, public_id, user_id];
+    const values = [provider_name, slug, logo, user_id, public_id];
     const result = await client.query(query, values);
     return result.rows[0];
   } catch (error) {
