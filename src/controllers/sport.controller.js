@@ -114,8 +114,8 @@ async function updateSport(req, res) {
         }
         const result = await sportService.updateSport(
             sport_id,
-            sport_name,
-            slug,
+            req.body.sport_name,
+            req.body.slug,
             logo,
             public_id,
             user_id

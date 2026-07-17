@@ -60,7 +60,7 @@ async function updateSport(id, name, slug, logo, public_id, user_id) {
     try {
         client = await pool.connect();
         const query = `SELECT * FROM update_sport($1, $2, $3, $4, $5, $6)`;
-        const values = [id, name, slug, logo, public_id, user_id];
+        const values = [id, name, slug, logo, user_id, public_id];
         const result = await client.query(query, values);
         return result.rows[0];
     } catch (error) {

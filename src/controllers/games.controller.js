@@ -12,7 +12,8 @@ const parseIds = (val) => {
 async function getGames(req, res) {
   try {
     const { page, limit, search, sort_by, sort_order } = req.body || {};
-    const result = await service.getGames(page, limit, search, sort_by, sort_order);
+    const user_id = req.user?.user_id || req.body?.user_id;
+    const result = await service.getGames(page, limit, search, sort_by, sort_order, user_id) || [];
     const totalRecords =
       result.length > 0 ? parseInt(result[0].total_records, 10) : 0;
     const data = result.map(({ total_records, ...rest }) => rest);

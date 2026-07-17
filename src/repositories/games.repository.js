@@ -1,16 +1,17 @@
 const pool = require("../config/db");
 
-async function getGames(page, limit, search, sort_by, sort_order) {
+async function getGames(page, limit, search, sort_by, sort_order, user_id) {
   let client;
   try {
     client = await pool.connect();
     const result = await client.query(
-      `SELECT * FROM get_games($1, $2, $3, $4, $5)`,
-      [page, limit, search, sort_by, sort_order],
+      `SELECT * FROM get_games($1, $2, $3, $4, $5, $6)`,
+      [page, limit, search, sort_by, sort_order, user_id],
     );
     return result.rows;
   } catch (error) {
     console.error("Error fetching games:", error);
+    throw error;
   } finally {
     if (client) {
       client.release();
@@ -26,6 +27,7 @@ async function getGameById(id) {
     return result.rows[0];
   } catch (error) {
     console.error("Error fetching game by ID:", error);
+    throw error;
   } finally {
     if (client) {
       client.release();
@@ -64,6 +66,7 @@ $10,$11,$12,$13,$14
     return result.rows[0];
   } catch (error) {
     console.error("Error creating game:", error);
+    throw error;
   } finally {
     if (client) {
       client.release();
@@ -103,7 +106,8 @@ $13,$14,$15
     );
     return result.rows[0];
   } catch (error) {
-    console.error("Error deleting game:", error);
+    console.error("Error updating game:", error);
+    throw error;
   } finally {
     if (client) {
       client.release();
@@ -116,12 +120,13 @@ async function deleteGame(id, user_id) {
   try {
     client = await pool.connect();
     const result = await client.query(
-      `SELECT * FROM delete_game($1,$2) AS success`,
-      [id, user_id],
+      `SELECT * FROM delete_game($1) AS success`,
+      [id],
     );
     return result.rows[0];
   } catch (error) {
     console.error("Error deleting game:", error);
+    throw error;
   } finally {
     if (client) {
       client.release();
@@ -140,6 +145,7 @@ async function updateGameStatus(id, status) {
     return result.rows[0];
   } catch (error) {
     console.error("Error updating game status:", error);
+    throw error;
   } finally {
     if (client) {
       client.release();

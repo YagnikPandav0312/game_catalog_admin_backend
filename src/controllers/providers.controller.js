@@ -117,17 +117,18 @@ async function updateProviders(req, res) {
     }
     const result = await providerService.updateProviders(
       provider_id,
-      provider_name,
-      slug,
+      req.body.provider_name,
+      req.body.slug,
       logo,
       public_id,
       user_id
     );
-    if (!result) {
+    console.log(result);
+    if (result.code !== 0) {
       return res.status(400).json({
         status: {
-          code: 1,
-          message: "Update Provider Failed",
+          code: result.code,
+          message: result.message,
         },
       });
     }
