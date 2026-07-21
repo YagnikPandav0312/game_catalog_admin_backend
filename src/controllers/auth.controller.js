@@ -83,30 +83,26 @@ async function register(req, res) {
 
 async function logout(req, res) {
   try {
-    const user_id = req.user.user_id;
-    const result = await authService.logout(user_id);
-    if (!result) {
-      return res.status(200).json({
-        status: {
-          code: 1,
-          message: "Logout Failed"
-        }
-      });
+    const user_id = req.user?.user_id || req.user?.id || req.body?.user_id;
+
+    if (user_id) {
+      await authService.logout(user_id);
     }
-    return res.status(result.code === 0 ? 200 : 404).json({
+
+    return res.status(200).json({
       status: {
         code: result.code,
         message: result.message
-      }
+      },
     });
-
   } catch (error) {
-    return res.status(500).json({
+    console.error("Error in logout auth controller:", error);
+    return res.status(200).json({
       status: {
         code: 2,
         error: error.message,
         message: "something went wrong"
-      }
+      },
     });
   }
 }

@@ -58,8 +58,8 @@ async function getGameCategoryById(req, res) {
 
 async function createGameCategory(req, res) {
   try {
-    const { game_categorie_name, slug, user_id } = req.body || {};
-    const result = await service.createGameCategory(game_categorie_name, slug, user_id);
+    const { game_categorie_name, slug, user_id, game_type_id } = req.body || {};
+    const result = await service.createGameCategory(game_categorie_name, slug, user_id,game_type_id);
     return res.status(result.code === 0 ? 201 : 400).json({
       status: {
         code: result.code,
@@ -79,9 +79,9 @@ async function createGameCategory(req, res) {
 
 async function updateGameCategory(req, res) {
   try {
-    const { id, game_categorie_id, game_categorie_name, slug, user_id } = req.body || {};
+    const { id, game_categorie_id, game_categorie_name, slug, user_id, game_type_id } = req.body || {};
     const targetId = id || game_categorie_id;
-    const result = await service.updateGameCategory(targetId, game_categorie_name, slug, user_id);
+    const result = await service.updateGameCategory(targetId, game_categorie_name, slug, user_id, game_type_id);
     if (!result) {
       return res.status(404).json({
         status: {

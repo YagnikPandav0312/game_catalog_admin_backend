@@ -13,16 +13,16 @@ async function getGameCategoryById(id, user_id) {
   return await gameCategoryRepo.getGameCategoryById(id, user_id);
 }
 
-async function createGameCategory(name, slug, user_id) {
+async function createGameCategory(name, slug, user_id, game_type_id) {
   if (!name || name.trim() === "") {
     throw new Error("Game Category Name Is Required");
   }
-  const result = await gameCategoryRepo.createGameCategory(name, slug, user_id);
+  const result = await gameCategoryRepo.createGameCategory(name, slug, user_id, game_type_id);
   return result;
 }
 
-async function updateGameCategory(id, name, slug, user_id) {
-  const result = await gameCategoryRepo.updateGameCategory(id, name, slug, user_id);
+async function updateGameCategory(id, name, slug, user_id, game_type_id) {
+  const result = await gameCategoryRepo.updateGameCategory(id, name, slug, user_id, game_type_id);
   if (result.code !== 0) {
     return null;
   }
