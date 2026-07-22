@@ -123,7 +123,6 @@ async function updateProviders(req, res) {
       public_id,
       user_id
     );
-    console.log(result);
     if (result.code !== 0) {
       return res.status(400).json({
         status: {

@@ -112,7 +112,6 @@ async function deleteGameCategory(req, res) {
     const { id, game_categorie_id, user_id } = req.body || {};
     const targetId = id || game_categorie_id;
     const result = await service.deleteGameCategory(targetId, user_id);
-    console.log(result);
     if (!result) {
       return res.status(404).json({
         status: {
