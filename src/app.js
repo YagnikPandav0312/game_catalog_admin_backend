@@ -17,4 +17,13 @@ app.use(logger);
 
 app.use("/api", indexRoutes);
 
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "success", message: "API is working!" });
+});
+
+app.get("/", (req, res) => {
+  res.status(200).json({ status: "success", message: "Backend is running!" });
+});
+
 module.exports = app;
+
