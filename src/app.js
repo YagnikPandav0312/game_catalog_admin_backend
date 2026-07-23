@@ -8,7 +8,16 @@ const indexRoutes = require("./routes/index.route");
 const logger = require("./middlewares/logger.middleware");
 const app = express();
 
-app.use(cors());
+app.use(cors(
+  // {
+  //   origin: [
+  //     "http://localhost:4200",
+  //     "https://your-frontend.vercel.app"
+  //   ],
+  //   credentials: true,
+  // }
+))
+  ;
 app.use(helmet());
 app.use(morgan("dev"));
 app.use(express.json());

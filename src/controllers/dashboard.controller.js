@@ -4,15 +4,21 @@ async function getDashboardStatistics(req, res) {
   try {
     const { user_id } = req.body;
     const result = await dashboardService.getDashboardStatistics(user_id);
-    const statistics = {
-      total_games: result ? parseInt(result.total_games, 10) : 0,
-      total_providers: result ? parseInt(result.total_providers, 10) : 0,
-      total_categories: result ? parseInt(result.total_categories, 10) : 0,
-      total_active_games: result ? parseInt(result.total_active_games, 10) : 0,
-    };
-
+    if (!result) {
+      return res.status(404).json({
+        status: {
+          code: 1,
+          message: "Dashboard statistics not found",
+        },
+      });
+    }
     return res.status(200).json({
-      data: statistics,
+      data: {
+        total_games: Number(result.total_games),
+        total_providers: Number(result.total_providers),
+        total_categories: Number(result.total_categories),
+        total_active_games: Number(result.total_active_games),
+      },
       status: {
         code: 0,
         message: "Dashboard statistics fetched successfully",
