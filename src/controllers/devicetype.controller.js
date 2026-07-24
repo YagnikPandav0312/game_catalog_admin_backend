@@ -1,7 +1,26 @@
 const service = require("../service/devicetype.service");
+const { validate } = require("../utils/schemaValidation");
+const {
+  getDeviceType: getDeviceTypeSchema,
+  getDeviceTypeById: getDeviceTypeByIdSchema,
+  createDeviceType: createDeviceTypeSchema,
+  updateDeviceType: updateDeviceTypeSchema,
+  deleteDeviceType: deleteDeviceTypeSchema,
+  updateDeviceTypeStatus: updateDeviceTypeStatusSchema,
+  getDeviceTypeDdl: getDeviceTypeDdlSchema,
+} = require("../utils/validation");
 
 async function getDeviceTypes(req, res) {
   try {
+    const validationError = await validate(req.body, getDeviceTypeSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { page, limit, search, sort_by, sort_order, user_id } = req.body || {};
     const result = await service.getDeviceTypes(
       page,
@@ -37,6 +56,15 @@ async function getDeviceTypeById(req, res) {
   try {
     const { id } = req.params;
     const { user_id } = req.body || {};
+    const validationError = await validate({ id, user_id }, getDeviceTypeByIdSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const result = await service.getDeviceTypeById(id, user_id);
     if (!result) {
       return res.status(404).json({
@@ -66,6 +94,15 @@ async function getDeviceTypeById(req, res) {
 
 async function createDeviceType(req, res) {
   try {
+    const validationError = await validate(req.body, createDeviceTypeSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { device_type_name, slug, user_id } = req.body || {};
     const result = await service.createDeviceType(device_type_name, slug, user_id);
     if (!result) {
@@ -95,6 +132,15 @@ async function createDeviceType(req, res) {
 
 async function updateDeviceType(req, res) {
   try {
+    const validationError = await validate(req.body, updateDeviceTypeSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { id, device_type_id, device_type_name, slug, user_id } = req.body || {};
     const targetId = id || device_type_id;
     const result = await service.updateDeviceType(
@@ -130,6 +176,15 @@ async function updateDeviceType(req, res) {
 
 async function deleteDeviceType(req, res) {
   try {
+    const validationError = await validate(req.body, deleteDeviceTypeSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { id, device_type_id, user_id } = req.body || {};
     const targetId = id || device_type_id;
     const result = await service.deleteDeviceType(targetId, user_id);
@@ -160,6 +215,15 @@ async function deleteDeviceType(req, res) {
 
 async function updateDeviceTypeStatus(req, res) {
   try {
+    const validationError = await validate(req.body, updateDeviceTypeStatusSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { id, device_type_id, status, is_active, user_id } = req.body || {};
     const targetId = id || device_type_id;
     const newStatus = status !== undefined ? status : is_active;
@@ -199,6 +263,15 @@ async function updateDeviceTypeStatus(req, res) {
 
 async function getDeviceTypeDdl(req, res) {
   try {
+    const validationError = await validate(req.body, getDeviceTypeDdlSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { user_id } = req.body || {};
     const result = await service.getDeviceTypeDdl(user_id);
     return res.status(200).json({

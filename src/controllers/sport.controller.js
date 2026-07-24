@@ -1,8 +1,26 @@
 const sportService = require('../service/sport.service');
 const cloudinary = require("../config/cloudinary");
+const { validate } = require("../utils/schemaValidation");
+const {
+  getSport: getSportSchema,
+  getSportById: getSportByIdSchema,
+  createSport: createSportSchema,
+  updateSport: updateSportSchema,
+  deleteSport: deleteSportSchema,
+  updateSportStatus: updateSportStatusSchema,
+} = require("../utils/validation");
 
 async function getSports(req, res) {
     try {
+        const validationError = await validate(req.body, getSportSchema);
+        if (validationError) {
+            return res.status(400).json({
+                status: {
+                    code: 3,
+                    message: validationError,
+                },
+            });
+        }
         const { page, limit, search, sort_by, sort_order } = req.body || {};
         const user_id = req.user?.user_id || req.body?.user_id;
         const result = await sportService.getSports(page, limit, search, sort_by, sort_order, user_id);
@@ -31,6 +49,15 @@ async function getSportById(req, res) {
     try {
         const { id } = req.params;
         const user_id = req.user?.user_id || req.body?.user_id;
+        const validationError = await validate({ id, user_id }, getSportByIdSchema);
+        if (validationError) {
+            return res.status(400).json({
+                status: {
+                    code: 3,
+                    message: validationError,
+                },
+            });
+        }
         const result = await sportService.getSportById(id, user_id);
         if (!result) {
             return res.status(404).json({
@@ -60,6 +87,15 @@ async function getSportById(req, res) {
 
 async function createSport(req, res) {
     try {
+        const validationError = await validate(req.body, createSportSchema);
+        if (validationError) {
+            return res.status(400).json({
+                status: {
+                    code: 3,
+                    message: validationError,
+                },
+            });
+        }
         const { sport_name, slug } = req.body || {};
         const user_id = req.user?.user_id || req.body?.user_id;
         const logo = req.file ? req.file.path : null;
@@ -92,6 +128,15 @@ async function createSport(req, res) {
 
 async function updateSport(req, res) {
     try {
+        const validationError = await validate(req.body, updateSportSchema);
+        if (validationError) {
+            return res.status(400).json({
+                status: {
+                    code: 3,
+                    message: validationError,
+                },
+            });
+        }
         const { sport_id, sport_name, slug } = req.body || {};
         const user_id = req.user?.user_id || req.body?.user_id;
         const sport = await sportService.getSportById(sport_id, user_id);
@@ -147,6 +192,15 @@ async function updateSport(req, res) {
 
 async function deleteSport(req, res) {
     try {
+        const validationError = await validate(req.body, deleteSportSchema);
+        if (validationError) {
+            return res.status(400).json({
+                status: {
+                    code: 3,
+                    message: validationError,
+                },
+            });
+        }
         const { sport_id, user_id } = req.body || {};
         const sport = await sportService.getSportById(sport_id, user_id);
         if (!sport) {
@@ -191,6 +245,15 @@ async function deleteSport(req, res) {
 
 async function updateSportStatus(req, res) {
     try {
+        const validationError = await validate(req.body, updateSportStatusSchema);
+        if (validationError) {
+            return res.status(400).json({
+                status: {
+                    code: 3,
+                    message: validationError,
+                },
+            });
+        }
         const { status, sport_id, is_active } = req.body || {};
         const user_id = req.user?.user_id || req.body?.user_id;
         const newStatus = status !== undefined ? status : is_active;

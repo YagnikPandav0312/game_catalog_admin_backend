@@ -1,7 +1,18 @@
 const dashboardService = require("../service/dashboard.service");
+const { validate } = require("../utils/schemaValidation");
+const { getDashboardStatistics: getDashboardStatisticsSchema } = require("../utils/validation");
 
 async function getDashboardStatistics(req, res) {
   try {
+    const validationError = await validate(req.body, getDashboardStatisticsSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { user_id } = req.body;
     const result = await dashboardService.getDashboardStatistics(user_id);
     if (!result) {

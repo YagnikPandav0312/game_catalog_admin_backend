@@ -1,7 +1,26 @@
 const service = require("../service/gamecategory.service");
+const { validate } = require("../utils/schemaValidation");
+const {
+  getGameCategory: getGameCategorySchema,
+  getGameCategoryById: getGameCategoryByIdSchema,
+  createGameCategory: createGameCategorySchema,
+  updateGameCategory: updateGameCategorySchema,
+  deleteGameCategory: deleteGameCategorySchema,
+  updateGameCategoryStatus: updateGameCategoryStatusSchema,
+  getGameCategoryDdl: getGameCategoryDdlSchema,
+} = require("../utils/validation");
 
 async function getGameCategories(req, res) {
   try {
+    const validationError = await validate(req.body, getGameCategorySchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { page, limit, search, sort_by, sort_order, user_id } = req.body || {};
     const result = await service.getGameCategories(page, limit, search, sort_by, sort_order, user_id);
     const totalRecords = result.length > 0 ? parseInt(result[0].total_records, 10) : 0;
@@ -29,6 +48,15 @@ async function getGameCategoryById(req, res) {
   try {
     const { id } = req.params;
     const { user_id } = req.body || {};
+    const validationError = await validate({ id, user_id }, getGameCategoryByIdSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const result = await service.getGameCategoryById(id, user_id);
     if (!result) {
       return res.status(404).json({
@@ -58,6 +86,15 @@ async function getGameCategoryById(req, res) {
 
 async function createGameCategory(req, res) {
   try {
+    const validationError = await validate(req.body, createGameCategorySchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { game_categorie_name, slug, user_id, game_type_id } = req.body || {};
     const result = await service.createGameCategory(game_categorie_name, slug, user_id,game_type_id);
     return res.status(result.code === 0 ? 201 : 400).json({
@@ -79,6 +116,15 @@ async function createGameCategory(req, res) {
 
 async function updateGameCategory(req, res) {
   try {
+    const validationError = await validate(req.body, updateGameCategorySchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { id, game_categorie_id, game_categorie_name, slug, user_id, game_type_id } = req.body || {};
     const targetId = id || game_categorie_id;
     const result = await service.updateGameCategory(targetId, game_categorie_name, slug, user_id, game_type_id);
@@ -109,6 +155,15 @@ async function updateGameCategory(req, res) {
 
 async function deleteGameCategory(req, res) {
   try {
+    const validationError = await validate(req.body, deleteGameCategorySchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { id, game_categorie_id, user_id } = req.body || {};
     const targetId = id || game_categorie_id;
     const result = await service.deleteGameCategory(targetId, user_id);
@@ -139,6 +194,15 @@ async function deleteGameCategory(req, res) {
 
 async function updateGameCategoryStatus(req, res) {
   try {
+    const validationError = await validate(req.body, updateGameCategoryStatusSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { id, game_categorie_id, status, is_active, user_id } = req.body || {};
     const targetId = id || game_categorie_id;
     const newStatus = status !== undefined ? status : is_active;
@@ -178,6 +242,15 @@ async function updateGameCategoryStatus(req, res) {
 
 async function getGameCategoryDdl(req, res) {
   try {
+    const validationError = await validate(req.body, getGameCategoryDdlSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { user_id } = req.body || {};
     const result = await service.getGameCategoryDdl(user_id);
     return res.status(200).json({

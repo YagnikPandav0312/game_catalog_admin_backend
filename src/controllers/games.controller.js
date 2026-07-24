@@ -1,4 +1,14 @@
 const service = require("../service/games.service");
+const cloudinary = require("../config/cloudinary");
+const { validate } = require("../utils/schemaValidation");
+const {
+  getGame: getGameSchema,
+  getGameById: getGameByIdSchema,
+  createGame: createGameSchema,
+  updateGame: updateGameSchema,
+  deleteGame: deleteGameSchema,
+  updateGameStatus: updateGameStatusSchema,
+} = require("../utils/validation");
 
 const parseIds = (val) => {
   if (!val) return null;
@@ -11,6 +21,15 @@ const parseIds = (val) => {
 
 async function getGames(req, res) {
   try {
+    const validationError = await validate(req.body, getGameSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { page, limit, search, sort_by, sort_order } = req.body || {};
     const user_id = req.user?.user_id || req.body?.user_id;
     const result = await service.getGames(page, limit, search, sort_by, sort_order, user_id) || [];
@@ -38,6 +57,15 @@ async function getGames(req, res) {
 async function getGameById(req, res) {
   try {
     const { id } = req.params;
+    const validationError = await validate({ id }, getGameByIdSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const result = await service.getGameById(id);
     if (!result) {
       return res.status(404).json({
@@ -68,6 +96,15 @@ async function getGameById(req, res) {
 
 async function createGame(req, res) {
   try {
+    const validationError = await validate(req.body, createGameSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const payload = {
       ...req.body,
       provider_id: req.body.provider_id
@@ -111,6 +148,15 @@ async function createGame(req, res) {
 
 async function updateGame(req, res) {
   try {
+    const validationError = await validate(req.body, updateGameSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { id, game_id } = req.body || {};
     const targetId = id || game_id;
     const games = await service.getGameById(targetId);
@@ -174,6 +220,15 @@ async function updateGame(req, res) {
 
 async function deleteGame(req, res) {
   try {
+    const validationError = await validate(req.body, deleteGameSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { games_id, user_id } = req.body;
     const games = await service.getGameById(games_id, user_id);
     if (!games) {
@@ -218,6 +273,15 @@ async function deleteGame(req, res) {
 
 async function updateGameStatus(req, res) {
   try {
+    const validationError = await validate(req.body, updateGameStatusSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { id, game_id, status, is_active } = req.body || {};
     const targetId = id || game_id;
     const newStatus = status !== undefined ? status : is_active;

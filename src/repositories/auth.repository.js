@@ -4,7 +4,7 @@ const pool = require("../config/db");
 async function logout(user_id) {
     let client;
     try {
-        const query = `SELECT * FROM logout($1)`;
+        const query = `SELECT * FROM game_catalog_admin.logout($1)`;
         const values = [user_id];
         client = await pool.connect();
         const result = await client.query(query, values);
@@ -50,7 +50,7 @@ async function registerUser(fullName, email, hashedPassword, role) {
     try {
         client = await pool.connect();
         const result = await client.query(
-            `SELECT * FROM register($1, $2, $3, $4)`,
+            `SELECT * FROM game_catalog_admin.register($1, $2, $3, $4)`,
             [fullName, email, hashedPassword, role]
         );
         return result.rows[0];

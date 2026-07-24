@@ -1,7 +1,25 @@
 const playerService = require("../service/player.service");
+const { validate } = require("../utils/schemaValidation");
+const {
+  getPlayer: getPlayerSchema,
+  getPlayerById: getPlayerByIdSchema,
+  createPlayer: createPlayerSchema,
+  updatePlayer: updatePlayerSchema,
+  deletePlayer: deletePlayerSchema,
+  updatePlayerStatus: updatePlayerStatusSchema,
+} = require("../utils/validation");
 
 async function getPlayers(req, res) {
     try {
+        const validationError = await validate(req.body, getPlayerSchema);
+        if (validationError) {
+            return res.status(400).json({
+                status: {
+                    code: 3,
+                    message: validationError,
+                },
+            });
+        }
         const { page, limit, search, sort_by, sort_order, user_id } = req.body || {};
         const result = await playerService.getPlayers(
             page,
@@ -38,12 +56,21 @@ async function getPlayerById(req, res) {
     try {
         const { id } = req.params;
         const { user_id } = req.body || {};
+        const validationError = await validate({ id, user_id }, getPlayerByIdSchema);
+        if (validationError) {
+            return res.status(400).json({
+                status: {
+                    code: 3,
+                    message: validationError,
+                },
+            });
+        }
         const result = await playerService.getPlayerById(id, user_id);
         if (!result) {
             return res.status(404).json({
                 status: {
                     code: 1,
-                    message: "Device Type Not Found",
+                    message: "Player Not Found",
                 },
             });
         }
@@ -51,7 +78,7 @@ async function getPlayerById(req, res) {
             data: result,
             status: {
                 code: 0,
-                message: "Device Type Fetched Successfully",
+                message: "Player Fetched Successfully",
             },
         });
     } catch (error) {
@@ -67,6 +94,15 @@ async function getPlayerById(req, res) {
 
 async function createPlayer(req, res) {
     try {
+        const validationError = await validate(req.body, createPlayerSchema);
+        if (validationError) {
+            return res.status(400).json({
+                status: {
+                    code: 3,
+                    message: validationError,
+                },
+            });
+        }
         const { first_name, last_name, full_name, email, mobile, password, user_id } = req.body || {};
         const result = await playerService.createPlayer(first_name, last_name, email, mobile, user_id, password, full_name);
         if (!result) {
@@ -96,6 +132,15 @@ async function createPlayer(req, res) {
 
 async function updatePlayer(req, res) {
     try {
+        const validationError = await validate(req.body, updatePlayerSchema);
+        if (validationError) {
+            return res.status(400).json({
+                status: {
+                    code: 3,
+                    message: validationError,
+                },
+            });
+        }
         const { id, player_id, first_name, last_name, full_name, email, mobile, user_id } = req.body || {};
         const targetId = id || player_id;
         const result = await playerService.updatePlayer(
@@ -134,6 +179,15 @@ async function updatePlayer(req, res) {
 
 async function deletePlayer(req, res) {
     try {
+        const validationError = await validate(req.body, deletePlayerSchema);
+        if (validationError) {
+            return res.status(400).json({
+                status: {
+                    code: 3,
+                    message: validationError,
+                },
+            });
+        }
         const { id, player_id, user_id } = req.body || {};
         const targetId = id || player_id;
         const result = await playerService.deletePlayer(targetId, user_id);
@@ -164,6 +218,15 @@ async function deletePlayer(req, res) {
 
 async function updatePlayerStatus(req, res) {
     try {
+        const validationError = await validate(req.body, updatePlayerStatusSchema);
+        if (validationError) {
+            return res.status(400).json({
+                status: {
+                    code: 3,
+                    message: validationError,
+                },
+            });
+        }
         const { id, player_id, status, is_active, user_id } = req.body || {};
         const targetId = id || player_id;
         const newStatus = status !== undefined ? status : is_active;

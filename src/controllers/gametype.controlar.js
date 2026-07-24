@@ -1,7 +1,26 @@
 const service = require("../service/gametype.service");
+const { validate } = require("../utils/schemaValidation");
+const {
+  getGameType: getGameTypeSchema,
+  getGameTypeById: getGameTypeByIdSchema,
+  createGameType: createGameTypeSchema,
+  updateGameType: updateGameTypeSchema,
+  deleteGameType: deleteGameTypeSchema,
+  updateGameTypeStatus: updateGameTypeStatusSchema,
+  getGameTypeDdl: getGameTypeDdlSchema,
+} = require("../utils/validation");
 
 async function getGameType(req, res) {
   try {
+    const validationError = await validate(req.body, getGameTypeSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { page, limit, search, sort_by, sort_order, user_id } = req.body || {};
     const result = await service.getGameType(
       page,
@@ -37,6 +56,15 @@ async function getGameTypeById(req, res) {
   try {
     const { id } = req.params;
     const { user_id } = req.body || {};
+    const validationError = await validate({ id, user_id }, getGameTypeByIdSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const result = await service.getGameTypeById(id, user_id);
     if (!result) {
       return res.status(404).json({
@@ -66,6 +94,15 @@ async function getGameTypeById(req, res) {
 
 async function createGameType(req, res) {
   try {
+    const validationError = await validate(req.body, createGameTypeSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { game_types_name, slug, user_id } = req.body || {};
     const result = await service.createGameType(game_types_name, slug, user_id);
     return res.status(201).json({
@@ -87,6 +124,15 @@ async function createGameType(req, res) {
 
 async function updateGameType(req, res) {
   try {
+    const validationError = await validate(req.body, updateGameTypeSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { id, game_type_id, game_types_name, slug, user_id } = req.body || {};
     const targetId = id || game_type_id;
     const result = await service.updateGameType(
@@ -122,6 +168,15 @@ async function updateGameType(req, res) {
 
 async function deleteGameType(req, res) {
   try {
+    const validationError = await validate(req.body, deleteGameTypeSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { id, game_type_id, user_id } = req.body || {};
     const targetId = id || game_type_id;
     const result = await service.deleteGameType(targetId, user_id);
@@ -152,6 +207,15 @@ async function deleteGameType(req, res) {
 
 async function updateGameTypeStatus(req, res) {
   try {
+    const validationError = await validate(req.body, updateGameTypeStatusSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { id, game_type_id, status, is_active, user_id } = req.body || {};
     const targetId = id || game_type_id;
     const newStatus = status !== undefined ? status : is_active;
@@ -191,6 +255,15 @@ async function updateGameTypeStatus(req, res) {
 
 async function getGameTypeDdl(req, res) {
   try {
+    const validationError = await validate(req.body, getGameTypeDdlSchema);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { user_id } = req.body || {};
     const result = await service.getGameTypeDdl(user_id);
     return res.status(200).json({

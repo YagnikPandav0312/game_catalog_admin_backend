@@ -1,6 +1,14 @@
 const gameCategoryService = require("../service/gamecategory.service");
 const providerService = require("../service/providerService");
 const clientService = require("../service/client.service");
+const gamesService = require("../service/games.service");
+const { validate } = require("../utils/schemaValidation");
+const {
+  clientGetProviders,
+  clientGetCategories,
+  clientGetGames,
+  clientGameDetail,
+} = require("../utils/validation");
 
 async function home(req, res) {
   try {
@@ -31,6 +39,15 @@ async function home(req, res) {
 
 async function providers(req, res) {
   try {
+    const validationError = await validate(req.body, clientGetProviders);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { page, limit, search, user_id } = req.body || {};
     const result = await providerService.getProviders(page, limit, search, null, null, user_id);
     const totalRecords =
@@ -57,6 +74,15 @@ async function providers(req, res) {
 
 async function categories(req, res) {
   try {
+    const validationError = await validate(req.body, clientGetCategories);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { page, limit, search, user_id } = req.body || {};
     const result = await gameCategoryService.getGameCategories(
       page,
@@ -90,6 +116,15 @@ async function categories(req, res) {
 
 async function games(req, res) {
   try {
+    const validationError = await validate(req.body, clientGetGames);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { page, limit, search, user_id } = req.body || {};
     const result = await gamesService.getGames(page, limit, search, null, null, user_id);
     const totalRecords =
@@ -116,6 +151,15 @@ async function games(req, res) {
 
 async function gameDetail(req, res) {
   try {
+    const validationError = await validate(req.body, clientGameDetail);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { id, user_id } = req.body || {};
     const result = await gamesService.getGameById(id, user_id);
     if (!result) {

@@ -1,8 +1,19 @@
 const providerService = require("../service/providerService");
 const cloudinary = require("../config/cloudinary");
+const { validate } = require("../utils/schemaValidation");
+const { getProvider, getProviderById, createProvider, updateProvider, updateProviderstatus, getProviderddl } = require("../utils/validation");
 
 async function getProviders(req, res) {
   try {
+    const validationError = await validate(req.body, getProvider);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { page, limit, search, sort_by, sort_order, user_id } = req.body || {};
     const result = await providerService.getProviders(
       page,
@@ -36,9 +47,17 @@ async function getProviders(req, res) {
 
 async function getProvidersById(req, res) {
   try {
-    const { id } = req.params;
-    const { user_id } = req.body;
-    const result = await providerService.getProvidersById(id, user_id);
+    const { provider_id, user_id } = req.body || {};
+    const validationError = await validate(req.body, getProviderById);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
+    const result = await providerService.getProvidersById(provider_id, user_id);
     if (!result) {
       return res.status(404).json({
         status: {
@@ -67,6 +86,15 @@ async function getProvidersById(req, res) {
 
 async function createProviders(req, res) {
   try {
+    const validationError = await validate(req.body, createProvider);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { provider_name, slug, user_id } = req.body || {};
     const logo = req.file ? req.file.path : null;
     const public_id = req.file ? req.file.filename : null;
@@ -96,6 +124,15 @@ async function createProviders(req, res) {
 
 async function updateProviders(req, res) {
   try {
+    const validationError = await validate(req.body, getProviderById);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { provider_id, user_id } = req.body || {};
     const provider = await providerService.getProvidersById(provider_id, user_id);
     if (!provider) {
@@ -114,6 +151,16 @@ async function updateProviders(req, res) {
       }
       logo = req.file.path;
       public_id = req.file.filename;
+    }
+
+    const validationErrorUpdate = await validate(req.body, updateProvider);
+    if (validationErrorUpdate) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationErrorUpdate,
+        },
+      });
     }
     const result = await providerService.updateProviders(
       provider_id,
@@ -150,6 +197,15 @@ async function updateProviders(req, res) {
 
 async function deleteProviders(req, res) {
   try {
+    const validationError = await validate(req.body, getProviderById);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { provider_id, user_id } = req.body;
     const provider = await providerService.getProvidersById(provider_id, user_id);
     if (!provider) {
@@ -194,25 +250,17 @@ async function deleteProviders(req, res) {
 
 async function updateProviderStatus(req, res) {
   try {
-    const { status, provider_id, user_id, is_active } = req.body || {};
-    const newStatus = status !== undefined ? status : is_active;
-    if (newStatus === undefined) {
+    const validationError = await validate(req.body, updateProviderstatus);
+    if (validationError) {
       return res.status(400).json({
         status: {
-          code: 1,
-          message: "Status is required (use 'status' or 'is_active')",
+          code: 3,
+          message: validationError,
         },
       });
     }
-    const result = await providerService.updateProviderStatus(provider_id, newStatus, user_id);
-    if (!result) {
-      return res.status(400).json({
-        status: {
-          code: 1,
-          message: "Update Provider Status Failed",
-        },
-      });
-    }
+    const { provider_id, status, user_id } = req.body || {};
+    const result = await providerService.updateProviderStatus(provider_id, status, user_id);
     return res.status(result.code === 0 ? 200 : 400).json({
       status: {
         code: result.code,
@@ -232,10 +280,17 @@ async function updateProviderStatus(req, res) {
 
 async function getProviderDdl(req, res) {
   try {
+    const validationError = await validate(req.body, getProviderddl);
+    if (validationError) {
+      return res.status(400).json({
+        status: {
+          code: 3,
+          message: validationError,
+        },
+      });
+    }
     const { user_id } = req.body;
-
     const providers = await providerService.getProviderDdl(user_id);
-
     return res.status(200).json({
       status: {
         code: 0,
